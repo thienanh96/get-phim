@@ -11,7 +11,8 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', api);
 var server = require('http').Server(app);
-server.listen(process.env.PORT || 3000, () => {
-    console.log('Server is running on port ' + port);
+server.listen(process.env.PORT || 3001, () => {
+    let p = server.address().port;
+    console.log('Server is running on port ' + p);
 })
 
