@@ -10,6 +10,10 @@ app.set('view engine', 'ejs');
 app.use(cors());
 app.use('/api', api);
 var server = require('http').Server(app);
+var http = require("http");
+  setInterval(function() {
+    http.get("http://<your app name>.herokuapp.com");
+}, 300000);
 server.listen(process.env.PORT || 3001, () => {
     let p = server.address().port;
     console.log('Server is running on port ' + p);
