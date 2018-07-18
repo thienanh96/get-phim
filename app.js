@@ -13,6 +13,7 @@ var server = require('http').Server(app);
 var http = require("http");
 setInterval(function() {
     http.get("https://get-phim-tool.herokuapp.com");
+    console.log('ping')
 }, 2000);
 server.listen(process.env.PORT || 3001, () => {
     let p = server.address().port;
