@@ -10,9 +10,9 @@ app.set('view engine', 'ejs');
 app.use(cors());
 app.use('/api', api);
 var server = require('http').Server(app);
-var http = require("http");
+var https = require("https");
 setInterval(function() {
-    http.get("https://get-phim-tool.herokuapp.com");
+    https.get("https://get-phim-tool.herokuapp.com");
     console.log('ping')
 }, 2000);
 server.listen(process.env.PORT || 3001, () => {
