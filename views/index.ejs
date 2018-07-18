@@ -28,7 +28,7 @@
         let src = "<%= src %>";
         if (src.includes('bilutv')) {
             $('#body').append(
-                '<video id="my-video" class="video-js" style="width:100%" controls preload="auto" poster="https://i.mycdn.me/image?id=870984845428&t=0&plc=WEB&tkn=*GpDcWFcvOUCvaplcX7nPmDXzndM" data-setup="{}"><source src="' +
+                '<video id="my-video" class="video-js" style="width:100%" controls preload="auto" data-setup="{}"><source src="' +
                 src + '"type="video/mp4"></video>');
             // $('#body').append('<video autoplay controls id="video"><source src="<%= src %>" type="video/mp4"></video>');
         } else {
