@@ -14,7 +14,7 @@ var https = require("https");
 setInterval(function() {
     https.get("https://get-phim-tool.herokuapp.com");
     console.log('ping')
-}, 2000);
+}, 300000);
 server.listen(process.env.PORT || 3001, () => {
     let p = server.address().port;
     console.log('Server is running on port ' + p);
