@@ -12,7 +12,7 @@ app.use('/api', api);
 var server = require('http').Server(app);
 var http = require("http");
   setInterval(function() {
-    http.get("http://<your app name>.herokuapp.com");
+    http.get("http://get-phim-22051996.herokuapp.com");
 }, 300000);
 server.listen(process.env.PORT || 3001, () => {
     let p = server.address().port;
