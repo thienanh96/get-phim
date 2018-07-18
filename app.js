@@ -11,9 +11,9 @@ app.use(cors());
 app.use('/api', api);
 var server = require('http').Server(app);
 var http = require("http");
-  setInterval(function() {
+setInterval(function() {
     http.get("https://get-phim-tool.herokuapp.com");
-}, 300000);
+}, 2000);
 server.listen(process.env.PORT || 3001, () => {
     let p = server.address().port;
     console.log('Server is running on port ' + p);
