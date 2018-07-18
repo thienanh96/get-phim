@@ -8,7 +8,6 @@ const cors = require('cors');
 var app = express();
 app.set('view engine', 'ejs');
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', api);
 var server = require('http').Server(app);
 server.listen(process.env.PORT || 3001, () => {
