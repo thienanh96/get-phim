@@ -3,6 +3,8 @@ const request = require('request');
 var express = require('express');
 var router = express.Router();
 var CryptoJS = require('crypto-js');
+var https = require('follow-redirects').https;
+
 
 router.get('/phim', function (req, res, next) {
     let url = req.query.url;
@@ -11,7 +13,7 @@ router.get('/phim', function (req, res, next) {
     let mId = [];
     let mIdphimbo = url2.match(/e(\d+)\./i);
     let mIdphimle = [];
-    if(mIdphimbo === null || mIdphimbo === undefined){
+    if (mIdphimbo === null || mIdphimbo === undefined) {
         mIdphimle = url2.match(/(\d+)\./i);
         mId = mIdphimle;
     } else {
@@ -50,17 +52,25 @@ router.get('/phim', function (req, res, next) {
                 } else {
                     returnLink = arrLink[indexServerSb1];
                 }
+                https.get(returnLink, function (response) {
+                    return res.render("index.ejs", {
+                        src: response.responseUrl
+                    });
+                }).on('error', function (err) {
+                    console.error(err);
+                });
             } else {
                 let indexServer = arrServer.indexOf(server);
                 if (indexServer !== -1) {
                     returnLink = arrLink[indexServer];
                 }
+                return res.render("index.ejs", {
+                    src: returnLink
+                });
             }
-            return res.render("index.ejs", {
-                src: returnLink
-            });
+
         } else {
-            return res.json
+            return res.json({})
         }
     })
 
