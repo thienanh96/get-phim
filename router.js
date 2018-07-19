@@ -56,6 +56,7 @@ router.get('/phim', function (req, res, next) {
                     returnLink = arrLink[indexServerSb1];
                 }
                 if (returnLink && returnLink.includes('http://')) {
+                    console.log('http is running');
                     http.get(returnLink, function (response) {
                           response.on('data', function (chunk) {
                             console.log(chunk.toString('utf8'));
