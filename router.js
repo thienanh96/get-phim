@@ -71,6 +71,10 @@ router.get('/phim', function (req, res, next) {
                         src: 'error'
                     });
                 }
+                if (returnLink) {
+                    returnLink = returnLink.replace('http://', 'https://');
+                    console.log('https: ', returnLink)
+                }
                 if (returnLink && returnLink.includes('https://')) {
                     https.get(returnLink, function (response) {
                         console.log('https, ',response.responseUrl);
