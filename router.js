@@ -3,9 +3,9 @@ const request = require('request');
 var express = require('express');
 var router = express.Router();
 var CryptoJS = require('crypto-js');
-var http = require('follow-redirects').http;
-var https = require('follow-redirects').https;
 var followRedirects = require('follow-redirects');
+var http = followRedirects.http;
+var https = followRedirects.https;
 followRedirects.maxRedirects = 50;
 
 router.get('/phim', function (req, res, next) {
