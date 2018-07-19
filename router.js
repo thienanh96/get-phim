@@ -55,10 +55,6 @@ router.get('/phim', function (req, res, next) {
                 } else {
                     returnLink = arrLink[indexServerSb1];
                 }
-                if (returnLink) {
-                    returnLink = returnLink.replace('http://', 'https://');
-                    console.log('link thay the: ', returnLink)
-                }
                 if (returnLink && returnLink.includes('http://')) {
                     console.log('http is running');
                     http.get(returnLink, function (response) {
@@ -69,6 +65,7 @@ router.get('/phim', function (req, res, next) {
                             src: response.responseUrl
                         });
                     }).on('error', function (err) {
+                        console.log('loi roi!!, 'err);
                         return res.render("index.ejs", {
                             src: 'error'
                         });
