@@ -6,7 +6,6 @@ var CryptoJS = require('crypto-js');
 var followRedirects = require('follow-redirects');
 var http = followRedirects.http;
 var https = followRedirects.https;
-followRedirects.maxRedirects = 50;
 
 router.get('/phim', function (req, res, next) {
     let url = req.query.url;
@@ -47,7 +46,7 @@ router.get('/phim', function (req, res, next) {
                 }
             }
             let returnLink;
-            if (server + '' === 'sb' || server + '' === 'st') {
+            if (server + '' === 'sb') {
                 let indexServerSb1 = arrServer.indexOf(server);
                 let indexServerSb2 = arrServer.indexOf(server, indexServerSb1 + 1);
                 if (indexServerSb2 !== -1) {
@@ -58,9 +57,6 @@ router.get('/phim', function (req, res, next) {
                 if (returnLink && returnLink.includes('http://')) {
                     console.log('http is running');
                     http.get(returnLink, function (response) {
-                          response.on('data', function (chunk) {
-                            console.log(chunk.toString('utf8'));
-                          });
                         return res.render("index.ejs", {
                             src: response.responseUrl
                         });
@@ -76,10 +72,6 @@ router.get('/phim', function (req, res, next) {
                         src: 'error'
                     });
                 }
-//                 if (returnLink) {
-//                     returnLink = returnLink.replace('http://', 'https://');
-//                     console.log('https: ', returnLink)
-//                 }
                 if (returnLink && returnLink.includes('https://')) {
                     https.get(returnLink, function (response) {
                         console.log('https resp: , ',response.responseUrl);
