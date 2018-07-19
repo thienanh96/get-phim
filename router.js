@@ -44,7 +44,7 @@ router.get('/phim', function (req, res, next) {
                 }
             }
             let returnLink;
-            if (server + '' === 'sb') {
+            if (server + '' === 'sb' || server + '' === 'st') {
                 let indexServerSb1 = arrServer.indexOf(server);
                 let indexServerSb2 = arrServer.indexOf(server, indexServerSb1 + 1);
                 if (indexServerSb2 !== -1) {
@@ -58,6 +58,9 @@ router.get('/phim', function (req, res, next) {
                     });
                 }).on('error', function (err) {
                     console.error(err);
+                    return res.render("index.ejs", {
+                        src: 'error'
+                    });
                 });
             } else {
                 let indexServer = arrServer.indexOf(server);
