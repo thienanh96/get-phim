@@ -28,7 +28,8 @@ router.get('/phim', function (req, res, next) {
         if (!error) {
             let arrFile = body.match(/"file":"([^"]+)"/g);
             let arrServer = body.match(/("server":"\w+")/g);
-            arrServer = arrServer.map(el => {
+            if(arrServer !== null && arrServer !== undefined){
+                arrServer = arrServer.map(el => {
                 let filter = el.match(/("\w+")/g);
                 filter = filter[1].replace('"', '').replace('"', '').trim();
                 return filter
@@ -94,6 +95,13 @@ router.get('/phim', function (req, res, next) {
                     src: returnLink
                 });
             }
+            } else {
+                                        return res.render("index.ejs", {
+                            src: 'error'
+                        });
+            
+            }
+
 
         } else {
             return res.json({})
