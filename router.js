@@ -58,6 +58,7 @@ router.get('/phim', function (req, res, next) {
                 if (returnLink && returnLink.includes('http://')) {
                     console.log('http is running');
                     http.get(returnLink, function (response) {
+                        console.log('Check match: ',response.responseUrl,returnLink);
                         if(response.responseUrl+'' === returnLink){
                             
                             return res.render("index.ejs", {
@@ -82,6 +83,7 @@ router.get('/phim', function (req, res, next) {
                 }
                 if (returnLink && returnLink.includes('https://')) {
                     https.get(returnLink, function (response) {
+                        console.log('Check match: ',response.responseUrl,returnLink);
                         if(response.responseUrl+'' === returnLink){
                             return res.render("index.ejs", {
                                 src: 'error'
