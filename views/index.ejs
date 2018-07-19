@@ -25,7 +25,7 @@
 
 <body id="body" style="background-color: rgb(0, 0, 0);display: block;">
     <script>
-        let src = "https://cdnb5.micetop.us/bilutv/2018032419/35121_tap_1.mp4";
+        let src = "<%= src %>";
         if(src.includes('drive.google.com') || src.includes('openload')){
             $('#body').append(
                 '<iframe width="100%" height="97%" style="border: none" src="<%= src %>" allowfullscreen="true" webkitallowfullscreen="true"></iframe>'
