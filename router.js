@@ -3,6 +3,7 @@ const request = require('request');
 var express = require('express');
 var router = express.Router();
 var CryptoJS = require('crypto-js');
+var http = require('follow-redirects').http;
 var https = require('follow-redirects').https;
 
 
@@ -21,7 +22,7 @@ router.get('/phim', function (req, res, next) {
         mId = mIdphimbo;
     }
     let pass = 'bilutv.com' + '4590481877' + mId[1];
-    console.log('md',mId[1]);
+    console.log('md', mId[1]);
     request(url, (error, response, body) => {
         body += '';
         if (!error) {
@@ -53,15 +54,34 @@ router.get('/phim', function (req, res, next) {
                 } else {
                     returnLink = arrLink[indexServerSb1];
                 }
-                https.get(returnLink, function (response) {
-                    return res.render("index.ejs", {
-                        src: response.responseUrl
+                if (returnLink && returnLink.includes('http://')) {
+                    http.get(returnLink, function (response) {
+                        return res.render("index.ejs", {
+                            src: response.responseUrl
+                        });
+                    }).on('error', function (err) {
+                        return res.render("index.ejs", {
+                            src: 'error'
+                        });
                     });
-                }).on('error', function (err) {
+                }
+                if(!returnLink){
                     return res.render("index.ejs", {
                         src: 'error'
                     });
-                });
+                }
+                if (returnLink && returnLink.includes('https://')) {
+                    https.get(returnLink, function (response) {
+                        return res.render("index.ejs", {
+                            src: response.responseUrl
+                        });
+                    }).on('error', function (err) {
+                        return res.render("index.ejs", {
+                            src: 'error'
+                        });
+                    });
+                }
+
             } else {
                 let indexServer = arrServer.indexOf(server);
                 if (indexServer !== -1) {
