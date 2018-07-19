@@ -21,6 +21,17 @@
         word-break: initial;
         position: unset;
     }
+    .not-found{
+    background-image: url("https://i.mycdn.me/image?id=870984845428&t=0&plc=WEB&tkn=*GpDcWFcvOUCvaplcX7nPmDXzndM");
+
+    /* Full height */
+    width: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
 </style>
 
 <body id="body" style="background-color: rgb(0, 0, 0);display: block;">
@@ -34,7 +45,7 @@
             $('#body').append('<video id="my-video" class="video-js" style="width:100%" controls preload="auto" data-setup="{}"><source src="' +src + '"type="video/mp4"></video>');
        
         } else {
-            $('#body').append('<img style="width:100px;height:auto" src="https://drudesk.com/sites/default/files/404-error-page-not-found.jpg">');
+            $('#body').append('<div class="not-found"></div>');
         }
     </script>
     <script src="https://vjs.zencdn.net/7.0.5/video.js"></script>
