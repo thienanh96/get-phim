@@ -65,7 +65,7 @@ router.get('/phim', function (req, res, next) {
                             src: response.responseUrl
                         });
                     }).on('error', function (err) {
-                        console.log('loi roi!!, 'err');
+                        console.log('loi roi!!', err);
                         return res.render("index.ejs", {
                             src: 'error'
                         });
