@@ -57,7 +57,9 @@ router.get('/phim', function (req, res, next) {
                 }
                 if (returnLink && returnLink.includes('http://')) {
                     http.get(returnLink, function (response) {
-                        console.log('http, ',response.responseUrl);
+                          response.on('data', function (chunk) {
+                            console.log(chunk.toString('utf8'));
+                          });
                         return res.render("index.ejs", {
                             src: response.responseUrl
                         });
@@ -72,10 +74,10 @@ router.get('/phim', function (req, res, next) {
                         src: 'error'
                     });
                 }
-                if (returnLink) {
-                    returnLink = returnLink.replace('http://', 'https://');
-                    console.log('https: ', returnLink)
-                }
+//                 if (returnLink) {
+//                     returnLink = returnLink.replace('http://', 'https://');
+//                     console.log('https: ', returnLink)
+//                 }
                 if (returnLink && returnLink.includes('https://')) {
                     https.get(returnLink, function (response) {
                         console.log('https resp: , ',response);
