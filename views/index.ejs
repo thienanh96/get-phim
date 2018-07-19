@@ -42,7 +42,7 @@
                 '<iframe width="100%" height="97%" style="border: none" src="<%= src %>" allowfullscreen="true" webkitallowfullscreen="true"></iframe>'
             );
         } else if(src !== 'error'){
-            $('#body').append('<video id="my-video" class="video-js" style="width:100%" controls preload="auto" data-setup="{}"><source src="' +src + '"type="video/mp4"></video>');
+            $('#body').append('<video poster="https://i.mycdn.me/image?id=870984845428&t=0&plc=WEB&tkn=*GpDcWFcvOUCvaplcX7nPmDXzndM" id="my-video" class="video-js" style="width:100%" controls preload="auto" data-setup="{}"><source src="' +src + '"type="video/mp4"></video>');
        
         } else {
             $('#body').append('<div class="not-found"></div>');
