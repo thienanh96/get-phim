@@ -58,9 +58,16 @@ router.get('/phim', function (req, res, next) {
                 if (returnLink && returnLink.includes('http://')) {
                     console.log('http is running');
                     http.get(returnLink, function (response) {
-                        return res.render("index.ejs", {
-                            src: response.responseUrl
-                        });
+                        if(response.responseUrl+'' === returnLink){
+                            
+                            return res.render("index.ejs", {
+                                src: 'error'
+                            });
+                        } else {
+                             return res.render("index.ejs", {
+                                src: response.responseUrl
+                            });
+                        }
                     }).on('error', function (err) {
                         console.log('loi roi!!', err);
                         return res.render("index.ejs", {
@@ -75,10 +82,15 @@ router.get('/phim', function (req, res, next) {
                 }
                 if (returnLink && returnLink.includes('https://')) {
                     https.get(returnLink, function (response) {
-                        console.log('https resp: , ',response.responseUrl);
-                        return res.render("index.ejs", {
-                            src: response.responseUrl
-                        });
+                        if(response.responseUrl+'' === returnLink){
+                            return res.render("index.ejs", {
+                                src: 'error'
+                            });
+                        } else {
+                             return res.render("index.ejs", {
+                                src: response.responseUrl
+                            });
+                        }
                     }).on('error', function (err) {
                         return res.render("index.ejs", {
                             src: 'error'
