@@ -26,15 +26,15 @@
 <body id="body" style="background-color: rgb(0, 0, 0);display: block;">
     <script>
         let src = "<%= src %>";
-        if (src.includes('bilutv')) {
-            $('#body').append(
-                '<video id="my-video" class="video-js" style="width:100%" controls preload="auto" data-setup="{}"><source src="' +
-                src + '"type="video/mp4"></video>');
-            // $('#body').append('<video autoplay controls id="video"><source src="<%= src %>" type="video/mp4"></video>');
-        } else {
+        if(src.includes('drive.google.com') || src.includes('openload')){
             $('#body').append(
                 '<iframe width="100%" height="97%" style="border: none" src="<%= src %>" allowfullscreen="true" webkitallowfullscreen="true"></iframe>'
             );
+        } else if(src !== 'error'){
+            $('#body').append('<video id="my-video" class="video-js" style="width:100%" controls preload="auto" data-setup="{}"><source src="' +src + '"type="video/mp4"></video>');
+       
+        } else {
+            $('body').append('<img> src="https://drudesk.com/sites/default/files/404-error-page-not-found.jpg"');
         }
     </script>
     <script src="https://vjs.zencdn.net/7.0.5/video.js"></script>
