@@ -21,6 +21,7 @@ router.get('/phim', function (req, res, next) {
         mId = mIdphimbo;
     }
     let pass = 'bilutv.com' + '4590481877' + mId[1];
+    console.log('md',mId[1]);
     request(url, (error, response, body) => {
         body += '';
         if (!error) {
@@ -57,7 +58,6 @@ router.get('/phim', function (req, res, next) {
                         src: response.responseUrl
                     });
                 }).on('error', function (err) {
-                    console.error(err);
                     return res.render("index.ejs", {
                         src: 'error'
                     });
