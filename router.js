@@ -69,6 +69,7 @@ router.get('/phim', function (req, res, next) {
             if (target && target !== '') {
                 let decodedText = unpack(target);
                 let urlPM = decodedText.match(/http:\/\/episode.*"/g)[0].split('"')[0];
+                console.log('urlPM: ',urlPM);
                 request({
                     method: 'GET',
                     url: urlPM,
