@@ -79,9 +79,8 @@ router.get('/phim', function (req, res, next) {
                     }
                 }, (error, response, bodyy) => {
                     bodyy += '';
-                    console.log('bodyttt: ',response);
-                    let finalUrl = bodyy.match(/https:\\\/\\\/video.*",/g);
-                    finalUrl = finalUrl[0].slice(0,finalUrl[0].length-2).replace(/\\\//g,'/')
+                    let finalUrl = bodyy.match(/https:\\\/\\\/video.*"/g)[0].split('"')[0];
+                    finalUrl = finalUrl.replace(/\\\//g,'/')
                     return res.render("index.ejs", {
                         src: finalUrl
                     });
