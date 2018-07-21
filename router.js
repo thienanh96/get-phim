@@ -72,7 +72,10 @@ router.get('/phim', function (req, res, next) {
                 console.log('urlPM: ',urlPM);
                 request({
                     method: 'GET',
-                    url: urlPM
+                    url: urlPM,
+                    headers: {
+                        'User-Agent': 'request',
+                    }
                 }, (error, response, bodyy) => {
                     bodyy += '';
                     console.log('bodyttt: ',bodyy);
