@@ -74,8 +74,7 @@ router.get('/phim', function (req, res, next) {
                     method: 'GET',
                     url: urlPM,
                     headers: {
-                        'User-Agent': 'Googlebot/2.1 (+http://www.google.com/bot.html)
-',
+                        'User-Agent': 'Googlebot/2.1 (+http://www.google.com/bot.html)',
                     }
                 }, (error, response, bodyy) => {
                     bodyy += '';
