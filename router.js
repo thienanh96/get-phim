@@ -73,8 +73,9 @@ router.get('/phim', function (req, res, next) {
                 request({
                     method: 'GET',
                     url: urlPM,
+                    proxy: 'http://42.115.91.177:53281',
                     headers: {
-                        'User-Agent': 'Googlebot/2.1 (+http://www.google.com/bot.html)',
+                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',                    
                     }
                 }, (error, response, bodyy) => {
                     bodyy += '';
