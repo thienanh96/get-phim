@@ -69,27 +69,23 @@ router.get('/phim', function (req, res, next) {
             if (target && target !== '') {
                 let decodedText = unpack(target);
                 let urlPM = decodedText.match(/http:\/\/episode.*"/g)[0].split('"')[0];
-                console.log('urlPM: ',urlPM);
+                console.log('episode: ', urlPM)
                 request({
                     method: 'GET',
                     url: urlPM,
-                    proxy: 'http://42.115.91.177:53281',
+                    proxy: 'http://113.161.90.156:3128',
                     headers: {
-                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',                    
+                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
                     }
                 }, (error, response, bodyy) => {
                     bodyy += '';
                     let finalUrl = bodyy.match(/https:\\\/\\\/video.*"/g)[0].split('"')[0];
-                    finalUrl = finalUrl.replace(/\\\//g,'/')
-                    return res.render("index.ejs", {
-                        src: finalUrl
-                    });
+                    finalUrl = finalUrl.replace(/\\\//g, '/')
+                    return chooseTemplate(finalUrl, res);
 
                 })
             } else {
-                return res.render("index.ejs", {
-                    src: 'error'
-                });
+                return chooseTemplate('', res);
             }
 
         })
@@ -130,9 +126,8 @@ router.get('/phim', function (req, res, next) {
                                     arrLink.push(plaintext);
                                 } catch (error) {
                                     console.log('LOI TRONG QUA TRINH DECODE, PASS THAY DOI!___________________- ', error);
-                                    return res.render("index.ejs", {
-                                        src: 'error'
-                                    });
+                                    return chooseTemplate('', res);
+
                                 }
                             }
                         }
@@ -144,40 +139,32 @@ router.get('/phim', function (req, res, next) {
                         if (returnLink && returnLink.includes('http://')) {
                             http.get(returnLink, function (response) {
                                 if (!response.responseUrl.includes('fbcdn.net')) {
-                                    return res.render("index.ejs", {
-                                        src: 'error'
-                                    });
+                                    return chooseTemplate('', res);
                                 } else {
-                                    return res.render("index.ejs", {
-                                        src: response.responseUrl
-                                    });
+                                    return chooseTemplate(finalUrl, res);
+
                                 }
                             }).on('error', function (err) {
-                                return res.render("index.ejs", {
-                                    src: 'error'
-                                });
+                                return chooseTemplate('', res);
+
                             });
                         }
                         if (!returnLink) {
-                            return res.render("index.ejs", {
-                                src: 'error'
-                            });
+                            return chooseTemplate('', res);
+
                         }
                         if (returnLink && returnLink.includes('https://')) {
                             https.get(returnLink, function (response) {
                                 if (!response.responseUrl.includes('fbcdn.net')) {
-                                    return res.render("index.ejs", {
-                                        src: 'error'
-                                    });
+                                    return chooseTemplate('', res);
+
                                 } else {
-                                    return res.render("index.ejs", {
-                                        src: response.responseUrl
-                                    });
+                                    return chooseTemplate(finalUrl, res);
+
                                 }
                             }).on('error', function (err) {
-                                return res.render("index.ejs", {
-                                    src: 'error'
-                                });
+                                return chooseTemplate('', res);
+
                             });
                         }
 
@@ -187,20 +174,17 @@ router.get('/phim', function (req, res, next) {
                             returnLink = arrLink[indexServer];
                         }
                         console.log('check phim: ', returnLink)
-                        return res.render("index.ejs", {
-                            src: returnLink
-                        });
+                        chooseTemplate(finalUrl, res);
+
                     }
                 } else {
-                    return res.render("index.ejs", {
-                        src: 'error'
-                    });
+                    return chooseTemplate('', res);
 
                 }
 
 
             } else {
-                return res.json({})
+                return chooseTemplate('', res);
             }
         })
     }
@@ -208,5 +192,21 @@ router.get('/phim', function (req, res, next) {
 
 
 });
+
+var chooseTemplate = (url, res) => {
+    if (url !== '') {
+        if (url.includes('drive.google.com') || url.includes('openload')) {
+            return res.render("index2.ejs", {
+                src: url
+            });
+        } else if (url !== 'error') {
+            return res.render("index.ejs", {
+                src: url
+            });
+        }
+    } else {
+        return res.render("index3.ejs");
+    }
+}
 
 module.exports = router
