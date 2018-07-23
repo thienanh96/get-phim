@@ -145,7 +145,7 @@ router.get('/phim', function (req, res, next) {
                                 if (!response.responseUrl.includes('fbcdn.net')) {
                                     return chooseTemplate('', res);
                                 } else {
-                                    return chooseTemplate(finalUrl, res);
+                                    return chooseTemplate(response.responseUrl, res);
 
                                 }
                             }).on('error', function (err) {
@@ -163,7 +163,7 @@ router.get('/phim', function (req, res, next) {
                                     return chooseTemplate('', res);
 
                                 } else {
-                                    return chooseTemplate(finalUrl, res);
+                                    return chooseTemplate(response.responseUrl, res);
 
                                 }
                             }).on('error', function (err) {
@@ -176,9 +176,11 @@ router.get('/phim', function (req, res, next) {
                         let indexServer = arrServer.indexOf(server);
                         if (indexServer !== -1) {
                             returnLink = arrLink[indexServer];
+                            chooseTemplate(returnLink, res);
+                        } else {
+                            chooseTemplate('',res);
                         }
-                        console.log('check phim: ', returnLink)
-                        chooseTemplate(finalUrl, res);
+                        
 
                     }
                 } else {
