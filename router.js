@@ -71,10 +71,13 @@ router.get('/phim', function (req, res, next) {
                 let urlPM = decodedText.match(/http:\/\/episode.*"/g)[0].split('"')[0];
                 console.log('episode: ', urlPM)
                 request({
-                    method: 'GET',
-                    url: 'http://phim360.xyz/index.php?url=' + urlPM,
+                    method: 'POST',
+                    url: 'http://phim360.xyz/index.php',
                     headers: {
                         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+                    },
+                    body: {
+                        bodyy: urlPM
                     }
                 }, (error, response, bodyy) => {
                     bodyy += '';
