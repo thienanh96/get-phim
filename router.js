@@ -125,7 +125,7 @@ router.get('/phim', function (req, res, next) {
                                 let encFile = mf[1].replace(/\\\//g, '/');
                                 let bytes;
                                 try {
-                                    bytes = CryptoJS.AES.decrypt('5a38ece380b16f0cfb773cfe292ec314958220ecd9200a99115a23b9ea2761d46c9dcca4fa71e2d3e1ac1628065476b4d838e666e2e0fd699640a4b0cdd61699', '14596736142328');
+                                    bytes = CryptoJS.AES.decrypt(encFile, passBilu);
                                     let plaintext = bytes.toString(CryptoJS.enc.Utf8);
                                     arrLink.push(plaintext);
                                 } catch (error) {
