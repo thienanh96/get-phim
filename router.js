@@ -72,8 +72,7 @@ router.get('/phim', function (req, res, next) {
                 console.log('episode: ', urlPM)
                 request({
                     method: 'GET',
-                    url: urlPM,
-                    proxy: 'http://113.161.90.156:3128',
+                    url: 'http://phim360.xyz/index.php?url=' + urlPM,
                     headers: {
                         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
                     }
