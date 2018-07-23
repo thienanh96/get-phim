@@ -80,6 +80,7 @@ router.get('/phim', function (req, res, next) {
                         bodyy: urlPM
                     }
                 }, (error, response, bodyy) => {
+                    console.log('RTT" ',bodyy);
                     bodyy += '';
                     let finalUrl = bodyy.match(/https:\\\/\\\/video.*"/g)[0].split('"')[0];
                     finalUrl = finalUrl.replace(/\\\//g, '/')
