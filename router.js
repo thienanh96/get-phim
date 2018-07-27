@@ -83,9 +83,9 @@ router.get('/phim', function (req, res, next) {
                 }, (error, response, bodyy) => {
                     console.log('RTT" ',bodyy);
                     bodyy += '';
-                    let match = bodyy.match(/https:\\\/\\\/video.*"/g)[0];
-                    if(match !== undefined && match !== null ){
-                        let finalUrl = match.split('"')[0];
+                    let match = bodyy.match(/https:\\\/\\\/video.*"/g);
+                    if(match !== null){
+                        let finalUrl = match[0].split('"')[0];
                         finalUrl = finalUrl.replace(/\\\//g, '/')
                         return chooseTemplate(finalUrl, res);
                     } else {
