@@ -209,7 +209,7 @@ var chooseTemplate = (url, res) => {
     if (url !== '') {
         if (url.includes('drive.google.com') || url.includes('openload')) {
             return res.render("index2.ejs", {
-                src: url
+                src: url +'?autoplay=1'
             });
         } else if (url !== 'error') {
             return res.render("index.ejs", {
