@@ -127,7 +127,6 @@ router.get('/phim', function (req, res, next) {
                     let arrLink = [];
                     if (arrFile) {
                         for (let file of arrFile) {
-                            console.log('server-file: ',file)
                             let mf = file.match(/"file":"([^"]+)"/i);
                             if (mf && mf[1]) {
                                 let encFile = mf[1].replace(/\\\//g, '/');
@@ -135,6 +134,7 @@ router.get('/phim', function (req, res, next) {
                                 try {
                                     bytes = CryptoJS.AES.decrypt(encFile, passBilu);
                                     let plaintext = bytes.toString(CryptoJS.enc.Utf8);
+                                    console.log('full-text" ',plaintext)
                                     arrLink.push(plaintext);
                                 } catch (error) {
                                     console.log('LOI TRONG QUA TRINH DECODE, PASS THAY DOI!___________________- ', error);
