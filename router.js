@@ -123,9 +123,11 @@ router.get('/phim', function (req, res, next) {
                         filter = filter[1].replace('"', '').replace('"', '').trim();
                         return filter
                     })
+                    console.log('server: ',arrServer)
                     let arrLink = [];
                     if (arrFile) {
                         for (let file of arrFile) {
+                            console.log('server-file: ',file)
                             let mf = file.match(/"file":"([^"]+)"/i);
                             if (mf && mf[1]) {
                                 let encFile = mf[1].replace(/\\\//g, '/');
