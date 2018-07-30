@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const port = 3001;
 const cors = require('cors');
+var model = require('./model');
 //......
 
 var app = express();
