@@ -1,0 +1,96 @@
+<head>
+    <meta charset="utf-8">
+    <meta content='width=device-width, initial-scale=1' name='viewport' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Tạo phim</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+</head>
+
+<body class="container">
+    <h1>Cập nhật tập phim</h1>
+    <div id="codee0" class="form-group">
+        <strong>Token</strong>:
+        <textarea class="form-control" id="token" rows="4" cols="10" style="width: 800px;"></textarea>
+        <button type="button" class="btn btn-primary" style="" id="lay-token">Get token</button>
+    </div>
+    <div id="codee11" class="form-group">
+        <button type="button" class="btn btn-danger" style="" id="get-film">Get phim</button>
+    </div>
+    <div class="form-group" id="info-post">
+            <button id="update-phim" type="button" class="btn btn-primary" >Update phim</button>
+    </div>
+    <script>
+        let originalHtml = '';
+        $('#lay-token').click((e) => {
+            window.open(
+                "https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=513153404181-o8flq7gdlueq838kion0541acqtp9iih.apps.googleusercontent.com&redirect_uri=http://localhost:3030&scope=https://www.googleapis.com/auth/blogger"
+            );
+        })
+        $('#get-film').click((e) => {
+            let token = $('#token').val().trim();
+            let urlParams = new URLSearchParams(window.location.search);
+            let fromEpisode = urlParams.get('fromEpisode');
+            let toEpisode = urlParams.get('toEpisode');
+            let idPost = urlParams.get('idPost');
+            $.ajax({
+                url: 'https://get-phim-tool.herokuapp.com/api/getblog?token=' + token + '&idPost=' + idPost +
+                    '&fromEpisode=' + fromEpisode + '&toEpisode=' + toEpisode,
+                method: "GET",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        originalHtml = response.data
+                        $('#info-post').append(
+                            '<textarea class="form-control" id="html" rows="4" cols="50" style="width: 800px;height: 500px">' +
+                            response.data + '</textarea>')
+                        // $('#info-post').append(
+                        //     '<button id="update-phim" type="button" class="btn btn-primary" >Update phim</button>'
+                        // )
+                    } else {
+                        alert('Lấy post thất bại!')
+                    }
+
+                },
+                error: function (err) {
+                    alert('Lấy post thất bại!')
+                }
+            });
+        })
+
+        $('#update-phim').click(() => {
+            let currentHTML = $('#html').val();
+            if (currentHTML === originalHtml) {
+                alert('Chỉnh sửa ID Facebook đã!')
+            } else {
+                let token = $('#token').val().trim();
+                let urlParams = new URLSearchParams(window.location.search);
+                let idPost = urlParams.get('idPost');
+                token = $('#token').val().trim();
+                let body = {
+                    html: currentHTML
+                }
+                $.ajax({
+                    url: 'https://get-phim-tool.herokuapp.com/api/updateblog?token=' + token + '&idPost=' + idPost,
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(body),
+                    dataType: "json",
+                    success: function (response) {
+                        if(response.success){
+                            $('#html').attr('style','background-color:green;width: 800px;height: 500px');
+                        } else {
+                            $('#html').attr('style','background-color:red;width: 800px;height: 500px');
+                        }
+                    
+                    },
+                    error: function (err) {
+                        alert('Update post thất bại!')
+                    }
+                });
+            }
+
+        })
+    </script>
+</body>
