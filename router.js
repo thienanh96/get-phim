@@ -361,7 +361,7 @@ var createfilm = async (href, snippet, episode) => {
     code += '<div id="mvi-trailer-data"></div>\n';
     let newDiv = '';
     for (let i = 1; i <= episode; i++) {
-        newDiv += '<id data-src="' + domainLocal + 'api/getfb?type=bo&play=">Tập ' + i + '</id>\n'
+        newDiv += '<id data-src="' + domainHeroku + 'api/getfb?type=bo&play=">Tập ' + i + '</id>\n'
     }
     code += '<div id="mvi-link-data">\n' + newDiv + '</div>'
     return {
@@ -443,7 +443,7 @@ router.get('/getblog', function (req, res, next) {
         let mviLinkData = $('#mvi-link-data').html();
         let newEp = '';
         for (let i = fromEpisode + 1; i <= toEpisode; i++) {
-            newEp += '<id data-src="' + domainLocal + 'api/getfb?type=bo&play=">Tập ' + i + '</id>\n';
+            newEp += '<id data-src="' + domainHeroku + 'api/getfb?type=bo&play=">Tập ' + i + '</id>\n';
         }
         $('#mvi-link-data').html(mviLinkData + newEp);
         let newContent = $('body').html();
