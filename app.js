@@ -113,7 +113,7 @@ var listenForChanges = () => {
         // }
         let originalArrObjTitle = filmObjs.map(el => el.title);
         let originalArrObjSnippet = filmObjs.map(el => el.episode);
-        let currentArrObjTitle = arr.map(el => el.title);
+        let currentArrObjTitle = filmObjs.map(el => el.title);
         let currentArrObjSnippet = arr.map(el => el.episode);
         for (let i = 0; i < currentArrObjTitle.length; i++) {
             let checkInclude = checkIncludes(currentArrObjTitle[i], originalArrObjTitle);
@@ -124,7 +124,7 @@ var listenForChanges = () => {
                 })
             } else {
                 let matchIndex = checkInclude.matchIndex;
-                if (currentArrObjSnippet[i] !== originalArrObjSnippet[matchIndex]) {
+                if (arr[i].snippet !== filmObjs[matchIndex].snippet) {
                     console.log('update____')
                     hasChanged = true;
                     updateFilm(arr[i], filmObjs[i]);
