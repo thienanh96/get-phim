@@ -1,0 +1,81 @@
+<head>
+    <meta charset="utf-8">
+    <meta content='width=device-width, initial-scale=1' name='viewport' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Tạo phim</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <h1>Tạo phim</h1>
+    <div id="codee0" class="form-group">
+        <strong>Token</strong>:
+        <textarea class="form-control" id="token" rows="4" cols="25" style="width: 800px;height: 300px"></textarea>
+        <button type="button" class="btn btn-primary" style="float: left;margin-left: 700px" id="lay-token">Get token</button>
+    </div>
+    <div id="codee1" class="form-group">
+        <strong>Copy code này vào chỗ HTML</strong>:
+        <textarea class="form-control" id="html" rows="4" cols="50" style="width: 800px;height: 500px">
+            <%- html %>
+        </textarea>
+    </div>
+    <div id="codee2" class="form-group">
+        <strong>Copy tên phim này vào chỗ Bài đăng</strong>
+        <input id="tenphim" class="form-control" style="width:800px" type="text" value="<%= name %>">
+    </div>
+    <div id="codee3" class="form-group">
+        <strong>Copy nhãn này vào chỗ Label</strong>
+        <input id="nhan" class="form-control" style="width:800px" type="text" value="<%= label %>">
+    </div>
+    <button type="button" class="btn btn-primary" style="float: left;margin-left: 700px" id="dang-post">Post</button>
+    <script>
+        $(document).ready(() => {
+            let originalHtml = $('#html').val();
+
+            $('#lay-token').click((e) => {
+                window.open(
+                    "https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=513153404181-o8flq7gdlueq838kion0541acqtp9iih.apps.googleusercontent.com&redirect_uri=http://localhost:3030&scope=https://www.googleapis.com/auth/blogger"
+                );
+            })
+
+            $('#dang-post').click((e) => {
+                let token = $('#token').val().trim();
+                let currentHTML = $('#html').val();
+                let label = $('#nhan').val();
+                let name = $('#tenphim').val();
+                let body = {
+                    kind: "blogger#post",
+                    blog: {
+                        id: "144199127316688870"
+                    },
+                    title: name,
+                    content: currentHTML,
+                    labels: label.split(',')
+                }
+                if (currentHTML === originalHtml) {
+                    alert('Mời nhập ID facebook!')
+                } else {
+                    $.ajax({
+                        url: 'https://get-phim-tool.herokuapp.com/api/postblog?token=' + token,
+                        type: "POST",
+                        data: JSON.stringify(body),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response);
+
+
+                        },
+                        error: function (err) {
+                            console.log("ERR: ", err);
+                            // document.getElementById('code' + i).style.background =
+                            //     '#ff0000';
+                        }
+                    });
+                }
+
+            })
+        })
+    </script>>
+</body>
