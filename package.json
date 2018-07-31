@@ -12,7 +12,10 @@
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "follow-redirects": "^1.5.1",
-    "mongoose": "^5.2.5"
+    "mongoose": "^5.2.5",
+    "string-similarity": "^1.2.0",
+    "body-parser": "^1.18.3",
+    "nodemailer": "^4.6.7"
   },
   "scripts": {
     "start": "node app.js"
