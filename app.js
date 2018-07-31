@@ -139,7 +139,7 @@ var listenForChanges = () => {
     })
 }
 
-setTimeout(function () {
+setInterval(function () {
     listenForChanges();
 }, 10000);
 
