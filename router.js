@@ -64,17 +64,18 @@ router.get('/phim', function (req, res, next) {
                         }
                     }
                     let returnLink;
-                    if (server + '' === 'sb') {
+                    if (server + '' === 'sb' || server + '' === 'st') {
                         let indexServerSb = arrServer.indexOf(server);
                         returnLink = arrLink[indexServerSb];
                         if (returnLink && returnLink.includes('http://')) {
                             http.get(returnLink, function (response) {
-                                if (!response.responseUrl.includes('fbcdn.net')) {
-                                    return chooseTemplate('', res);
-                                } else {
-                                    return chooseTemplate(response.responseUrl, res);
+                                return chooseTemplate(response.responseUrl, res);
+//                                 if (!response.responseUrl.includes('fbcdn.net')) {
+//                                     return chooseTemplate('', res);
+//                                 } else {
+//                                     return chooseTemplate(response.responseUrl, res);
 
-                                }
+//                                 }
                             }).on('error', function (err) {
                                 return chooseTemplate('', res);
 
@@ -86,13 +87,14 @@ router.get('/phim', function (req, res, next) {
                         }
                         if (returnLink && returnLink.includes('https://')) {
                             https.get(returnLink, function (response) {
-                                if (!response.responseUrl.includes('fbcdn.net')) {
-                                    return chooseTemplate('', res);
+                                return chooseTemplate(response.responseUrl, res);
+//                                 if (!response.responseUrl.includes('fbcdn.net')) {
+//                                     return chooseTemplate('', res);
 
-                                } else {
-                                    return chooseTemplate(response.responseUrl, res);
+//                                 } else {
+//                                     return chooseTemplate(response.responseUrl, res);
 
-                                }
+//                                 }
                             }).on('error', function (err) {
                                 return chooseTemplate('', res);
 
