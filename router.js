@@ -247,5 +247,277 @@ router.get('/uploadfilm', function (req, res, next) {
 })
 
 
+var domainHeroku = "https://get-phim-tool.herokuapp.com/";
+var domainLocal = "http://localhost:3030/";
+
+router.get('/createfilm', function (req, res, next) {
+    let href = req.query.href + '';
+    let snippet = req.query.snippet + '';
+    console.log('snippet: ', snippet, href)
+    let episode = parseInt(req.query.episode + '');
+    createfilm(href, snippet, episode).then(filmObj => {
+        return res.render('create.ejs', filmObj);
+    })
+})
+
+var createfilm = async (href, snippet, episode) => {
+    let liIndex;
+    if (snippet.includes('/')) {
+        liIndex = 0;
+    } else {
+        liIndex = 1;
+    }
+    console.log('li: ', liIndex)
+    let options = {
+        method: 'GET',
+        uri: href
+    }
+    let content1 = await rp(options).catch(err => console.log(err));
+    let $1 = cheerio.load(content1, {
+        decodeEntities: false
+    });
+    let poster = $1('.film-info').first().html();
+    let $2 = cheerio.load(poster, {
+        decodeEntities: false
+    });
+    let thumbPhoto = $2('img')[0].attribs['data-cfsrc'];
+    let vietName = $2('h1').first().text().trim();
+    let engName = $2('.real-name').first().text().trim();
+
+    let filmContentDiv = $1('.film-content').first().html();
+    let $3 = cheerio.load(filmContentDiv, {
+        decodeEntities: false
+    });
+    let filmContent = $3('p').first().text();
+    let coverPhoto;
+    if ($3('img').first()) {
+        coverPhoto = $3('img')[0].attribs['data-cfsrc'];
+    } else {
+        coverPhoto = ''
+    }
+    let metaData = $2('.meta-data').first().html();
+    let liCount = 1;
+    while (true) {
+        metaData = metaData.replace('<li>', '<li id="meta-data-' + liCount + '">');
+        liCount++;
+        if (!metaData.match(/<li>/g)) break;
+    }
+    let $4 = cheerio.load(metaData, {
+        decodeEntities: false
+    });
+    let indexDienvien = liIndex + 3;
+    let indexTheloai = liIndex + 4;
+    let indexQuocgia = liIndex + 5;
+    let indexThoiluong = liIndex + 6;
+    let indexNamsanxuat = liIndex + 8;
+    let indexDanhgia = liIndex + 11;
+
+    let dienvien = $4("#meta-data-" + indexDienvien).text().replace('Diễn viên:', '').split(',').map(el => {
+        return el.trim().replace(/\n/g, '')
+    })
+    dienvien = processDienVien(dienvien); //dienvien
+    let theloai = $4("#meta-data-" + indexTheloai).text().replace('Thể loại:', '').split(',').map(el => {
+        return el.trim().replace(/\n/g, '')
+    })
+    theloai = processTheLoai(theloai); //theloai
+    let quocgia = $4("#meta-data-" + indexQuocgia).text().replace('Quốc gia:', '').split(',').map(el => {
+        return el.trim().replace(/\n/g, '')
+    })[0] //quocgia
+    let thoiluong = $4("#meta-data-" + indexThoiluong).text().replace('Thời lượng:', '').split(',').map(el => {
+        return el.trim().replace(/\n/g, '')
+    })[0] // thoiluong
+    let namsanxuat = $4("#meta-data-" + indexNamsanxuat).text().replace('Năm xuất bản:', '').split(',').map(el => {
+        return el.trim().replace(/\n/g, '')
+    })[0] // namsanxuat
+    let danhgia = $4("#meta-data-" + indexDanhgia).text().split(' ').map(el => {
+        return el.trim()
+    })
+    danhgia = danhgia.join('').replace('(', '').replace(')', '') + ' đánh giá';
+    let code = '<img id="mvi-thumb-data" src="' +
+        thumbPhoto +
+        '"/><br/>\n';
+    code += '<img id="mvi-cover-data" src="' +
+        coverPhoto +
+        '"/><br/>\n';
+    code += '<div id="mvi-status-data">\n[' +
+        snippet +
+        ']\n</div>\n';
+    code += '<div id="mvi-desc-data">' + filmContent +
+        '</div>\n';
+    code += '<div id="mvi-genre-data">' + theloai +
+        '</div>\n'
+    code += '<div id="mvi-actor-data">' + dienvien +
+        '</div>\n'
+    code +=
+        '<div id="mvi-director-data">pp_00_' + danhgia + '</div>\n';
+    code += '<div id="mvi-country-data">' + quocgia +
+        '</div>\n'
+    code += '<div id="mvi-duration-data">' + thoiluong +
+        '</div>\n'
+    code += '<div id="mvi-res-data">' + snippet +
+        '</div>\n'
+    code += '<div id="mvi-year-data">' + namsanxuat +
+        '</div>\n';
+    code += '<div id="mvi-trailer-data"></div>\n';
+    let newDiv = '';
+    for (let i = 1; i <= episode; i++) {
+        newDiv += '<id data-src="' + domainLocal + 'api/getfb?type=bo&play=">Tập ' + i + '</id>\n'
+    }
+    code += '<div id="mvi-link-data">\n' + newDiv + '</div>'
+    return {
+        html: code,
+        label: 'phim, phim-bo, aaa, hang-dau, ' + getCountry(quocgia + '') + ' ,' + theloai,
+        name: vietName + ' - ' + engName
+    }
+}
+
+var getCountry = (country) => {
+    if (country === 'Âu - Mỹ') {
+        return 'phim-au-my';
+    }
+    if (country === 'Nhật Bản') {
+        return 'phim-nhat'
+    }
+    if (country === 'Trung Quốc' || country === 'Hồng Kông') {
+        return 'phim-trung-quoc';
+    }
+    if (country === 'Hàn Quốc') {
+        console.log('han quoc')
+        return 'phim-han'
+    }
+    if (country === 'Thái Lan') {
+        return 'phim-thai-lan'
+    }
+    if (country === 'Việt Nam') {
+        return 'phim-viet'
+    }
+    return 'phim-au-my';
+}
+
+var processTheLoai = (theloaiArr) => {
+    let tls = [];
+    for (let tl of theloaiArr) {
+        tl.split('-').map(el => {
+            tls.push('Phim ' + el.trim());
+        })
+    }
+    return tls;
+}
+
+var processDienVien = (dienvienArr) => {
+    let finalDV = [];
+    for (let dv of dienvienArr) {
+        let orginalDv = dv;
+        dv = dv.toLowerCase();
+        dv = dv.split(' ').join('-');
+        dv = 'pp_' + dv + '_' + orginalDv;
+        finalDV.push(dv);
+    }
+    return finalDV
+}
+
+router.get('/updatefilm', function (req, res, next) {
+    return res.render('update.ejs');
+
+})
+
+router.get('/getblog', function (req, res, next) {
+    let idPost = req.query.idPost;
+    let token = req.query.token;
+    let fromEpisode = parseInt(req.query.fromEpisode);
+    let toEpisode = parseInt(req.query.toEpisode);
+    let options = {
+        method: 'GET',
+        uri: 'https://www.googleapis.com/blogger/v3/blogs/144199127316688870/posts/' + idPost,
+        headers: {
+            'Content-Type': 'application/json;',
+            'Authorization': 'Bearer ' + token,
+        },
+    };
+    rp(options).then(result => {
+        result = JSON.parse(result);
+        let content = result.content;
+        let $ = cheerio.load(content, {
+            decodeEntities: false
+        });
+        let mviLinkData = $('#mvi-link-data').html();
+        let newEp = '';
+        for (let i = fromEpisode + 1; i <= toEpisode; i++) {
+            newEp += '<id data-src="' + domainLocal + 'api/getfb?type=bo&play=">Tập ' + i + '</id>\n';
+        }
+        $('#mvi-link-data').html(mviLinkData + newEp);
+        let newContent = $('body').html();
+        return res.json({
+            success: true,
+            data: newContent
+        })
+    }, err => {
+        return res.json({
+            success: false,
+            data: err
+        })
+    })
+
+})
+
+
+
+router.post('/postblog', function (req, res, next) {
+    let body = req.body;
+    let token = req.query.token + '';
+    let options = {
+        method: 'POST',
+        uri: 'https://www.googleapis.com/blogger/v3/blogs/144199127316688870/posts',
+        body: JSON.stringify(body),
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json;'
+        },
+    };
+    rp(options).then(result => {
+        return res.json({
+            success: true,
+            data: result
+        })
+    }, err => {
+        return res.json({
+            success: false,
+            data: err
+        })
+    })
+
+})
+
+router.post('/updateblog', function (req, res, next) {
+    let newContent = req.body.html;
+    console.log('newc: ',newContent)
+    let token = req.query.token + '';
+    let idPost = req.query.idPost;
+    let options = {
+        method: 'PATCH',
+        rejectUnauthorized: false,
+        uri: 'https://www.googleapis.com/blogger/v3/blogs/144199127316688870/posts/' + idPost,
+        json: true,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: {
+            content: newContent
+        }
+    };
+    rp(options).then(result => {
+        return res.json({
+            success: true,
+            data: result
+        })
+    }, err => {
+        return res.json({
+            success: false,
+            data: err
+        })
+    })
+})
+
 
 module.exports = router
