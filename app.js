@@ -133,7 +133,7 @@ var listenForChanges = () => {
                 }
             }
         }
-        if (!hasChanged) {
+        if (hasChanged) {
             filmObjs = arr;
         }
     })
@@ -141,7 +141,7 @@ var listenForChanges = () => {
 
 setInterval(function () {
     listenForChanges();
-}, 21600000);
+}, 14400000);
 
 var createNewFilm = (objFilm) => {
     console.log('create', objFilm);
