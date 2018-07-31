@@ -145,7 +145,7 @@ setTimeout(function () {
 
 var createNewFilm = (objFilm) => {
     console.log('create', objFilm);
-    let link = domainLocal + 'api/createfilm?snippet=' + objFilm.snippet + '&href=' + objFilm.href + '&episode=' + objFilm.episode;
+    let link = domainHeroku + 'api/createfilm?snippet=' + objFilm.snippet + '&href=' + objFilm.href + '&episode=' + objFilm.episode;
     link = encodeURI(link);
     let mailOptions = {
         from: 'thienanhnguyen00009@gmail.com', // sender address
@@ -176,7 +176,7 @@ var updateFilm = (newObjFilm, oldObjFilm) => {
             let first = resultSearch.items[0];
             if (first && stringSimilarity.compareTwoStrings(first.title, titleFilm) > 0.80) {
                 let updateId = first.id;
-                let link = domainLocal + 'api/updatefilm?idPost=' + updateId + '&fromEpisode=' + oldObjFilm.episode + '&toEpisode=' + newObjFilm.episode;
+                let link = domainHeroku + 'api/updatefilm?idPost=' + updateId + '&fromEpisode=' + oldObjFilm.episode + '&toEpisode=' + newObjFilm.episode;
                 link = encodeURI(link);
                 let mailOptions = {
                     from: 'thienanhnguyen00009@gmail.com', // sender address
