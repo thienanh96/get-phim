@@ -165,7 +165,7 @@ router.get('/getfb', function (req, res, next) {
     Film.getFilm(idFilm).then(film => {
         if (film) {
             let timeFilm = film.time;
-            if (Date.now() - timeFilm > 1000) {
+            if (Date.now() - timeFilm > 1000*3600*2) {
                 getFilmfromFB(idFilm).then(filmObj => {
                     if (filmObj.source) {
                         let newSource = filmObj.source;
