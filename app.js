@@ -151,7 +151,7 @@ var createNewFilm = (objFilm) => {
         from: 'thienanhnguyen00009@gmail.com', // sender address
         to: 'thienanhnguyen00008@gmail.com', // list of receivers
         subject: '[PHIM360] - Có sự thay đổi - TẠO MỚI PHIM', // Subject line
-        html: '<h1>CLICK:</h1><p>' + link + '</p>'
+        html: '<h1>Link: </h1><p>'+objFilm.href+'</p><h1>CLICK:</h1><p>' + link + '</p>'
     };
     return transporter.sendMail(mailOptions);
 }
