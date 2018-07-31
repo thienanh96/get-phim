@@ -141,7 +141,7 @@ var listenForChanges = () => {
 
 setTimeout(function () {
     listenForChanges();
-}, 1000*3600*6);
+}, 10000);
 
 var createNewFilm = (objFilm) => {
     console.log('create', objFilm);
