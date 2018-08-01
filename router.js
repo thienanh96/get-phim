@@ -65,7 +65,13 @@ router.get('/phim', function (req, res, next) {
                     }
                     let returnLink;
                     if (server + '' === 'sb' || server + '' === 'st') {
-                        let indexServerSb = arrServer.indexOf('st');
+                        let indexServerSb = '';
+                        if(server+''=== 'sb'){
+                            indexServerSb = arrServer.indexOf('st');
+                        }
+                        if(server+''=== 'st'){
+                            indexServerSb = arrServer.indexOf('sb');
+                        }
                         returnLink = arrLink[indexServerSb];
                         if (returnLink && returnLink.includes('http://')) {
                             http.get(returnLink, function (response) {
