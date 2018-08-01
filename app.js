@@ -174,8 +174,9 @@ var updateFilm = (newObjFilm, oldObjFilm) => {
     rp(options).then(resultSearch => {
         if (resultSearch.items) { //tim thay
             let searchNames = resultSearch.items.map(el => el.title.split('-')[0].trim());
-            if (searchNames && checkIncludes(titleFilm,searchNames).include) {
-                let updateId = first.id;
+            let includeSearch = checkIncludes(titleFilm,searchNames);
+            if (searchNames && includeSearch.include) {
+                let updateId = resultSearch.items[includeSearch.matchIndex].id;
                 let link = domainHeroku + 'api/updatefilm?idPost=' + updateId + '&fromEpisode=' + oldObjFilm.episode + '&toEpisode=' + newObjFilm.episode;
                 link = encodeURI(link);
                 let mailOptions = {
