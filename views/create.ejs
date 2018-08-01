@@ -64,11 +64,12 @@
                         dataType: "json",
                         success: function (response) {
                             console.log(response);
-
+                            alert('Post phim thành công!')
 
                         },
                         error: function (err) {
                             console.log("ERR: ", err);
+                            alert('Post phim thất bại!')
                             // document.getElementById('code' + i).style.background =
                             //     '#ff0000';
                         }
