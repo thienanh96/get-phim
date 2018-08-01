@@ -174,7 +174,7 @@ var updateFilm = (newObjFilm, oldObjFilm) => {
     rp(options).then(resultSearch => {
         if (resultSearch.items) { //tim thay
             let first = resultSearch.items[0];
-            if (first && stringSimilarity.compareTwoStrings(first.title, titleFilm) > 0.80) {
+            if (first && stringSimilarity.compareTwoStrings(first.title, titleFilm) > 0.75) {
                 let updateId = first.id;
                 let link = domainHeroku + 'api/updatefilm?idPost=' + updateId + '&fromEpisode=' + oldObjFilm.episode + '&toEpisode=' + newObjFilm.episode;
                 link = encodeURI(link);
