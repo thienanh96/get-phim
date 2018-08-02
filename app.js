@@ -177,7 +177,16 @@ var updateFilm = (newObjFilm, oldObjFilm) => {
             let includeSearch = checkIncludes(titleFilm,searchNames);
             if (searchNames && includeSearch.include) {
                 let updateId = resultSearch.items[includeSearch.matchIndex].id;
-                let link = domainHeroku + 'api/updatefilm?idPost=' + updateId + '&fromEpisode=' + oldObjFilm.episode + '&toEpisode=' + newObjFilm.episode;
+                let contentSearch = resultSearch.items[includeSearch.matchIndex].content;
+                let $ = cheerio.load(contentSearch, {
+                    decodeEntities: false
+                });
+                let fromEpisode = '';
+                if(contentSearch.includes('mvi-status-data')){
+                    fromEpisode = $('#mvi-status-data').text().replace(']','');
+                }
+                fromEpisode = processSnippet(fromEpisode);
+                let link = domainHeroku + 'api/updatefilm?idPost=' + updateId + '&fromEpisode=' + fromEpisode + '&toEpisode=' + newObjFilm.episode;
                 link = encodeURI(link);
                 let mailOptions = {
                     from: 'thienanhnguyen00009@gmail.com', // sender address
