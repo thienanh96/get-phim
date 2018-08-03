@@ -443,7 +443,7 @@ var processDienVien = (dienvienArr) => {
         let orginalDv = dv;
         dv = dv.toLowerCase();
         dv = dv.split(' ').join('-');
-        dv = 'pp_' + dv + '_' + orginalDv;
+        dv = ' pp_' + dv + '_' + orginalDv;
         finalDV.push(dv);
     }
     return finalDV
