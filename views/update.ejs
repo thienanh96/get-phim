@@ -62,9 +62,6 @@
 
         $('#update-phim').click(() => {
             let currentHTML = $('#html-old').val();
-            if (currentHTML === originalHtml) {
-                alert('Chỉnh sửa ID Facebook đã!')
-            } else {
                 let token = $('#token').val().trim();
                 let urlParams = new URLSearchParams(window.location.search);
                 let idPost = urlParams.get('idPost');
@@ -92,7 +89,7 @@
                         alert('Update post thất bại!')
                     }
                 });
-            }
+            
 
         })
     </script>
