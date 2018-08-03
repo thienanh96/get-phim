@@ -127,7 +127,7 @@ var listenForChanges = () => {
                 if (arr[i].snippet !== filmObjs[matchIndex].snippet) {
                     console.log('update____')
                     hasChanged = true;
-                    updateFilm(arr[i], filmObjs[i]);
+                    updateFilm(arr[i]);
                 } else {
                     console.log('no change!!')
                 }
