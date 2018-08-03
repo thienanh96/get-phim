@@ -53,9 +53,6 @@
                     content: currentHTML,
                     labels: label.split(',')
                 }
-                if (currentHTML === originalHtml) {
-                    alert('Mời nhập ID facebook!')
-                } else {
                     $.ajax({
                         url: 'https://get-phim-tool.herokuapp.com/api/postblog?token=' + token,
                         type: "POST",
@@ -74,7 +71,7 @@
                             //     '#ff0000';
                         }
                     });
-                }
+                
 
             })
         })
