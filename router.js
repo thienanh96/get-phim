@@ -341,6 +341,31 @@ var createfilm = async (href, snippet, episode) => {
         return el.trim()
     })
     danhgia = danhgia.join('').replace('(', '').replace(')', '') + ' đánh giá';
+    let linkXem = 'http://bilutv.com' + $2(".btn-see").first().attr("href");
+    let options1 = {
+        method: 'GET',
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+        },
+        uri: linkXem
+    }
+    let contentXem = await rp(options1).catch(err => console.log(err));
+    let $5 = cheerio.load(contentXem, {
+        decodeEntities: false
+    });
+    let linkXemArr = [];
+    let numberOfLiTag = $5("#list_episodes li").length;
+    for (let i = 1; i <= numberOfLiTag; i++) {
+        let link = $5("#list_episodes li:nth-child(" + i + ")").html();
+        let $$ = cheerio.load(link, {
+            decodeEntities: false
+        });
+        linkXemArr.push({
+            href: 'http://bilutv.com' + $$("a").first().attr("href"),
+            episode: $$("a").first().text()
+        })
+    }
+    console.log('number: ', linkXemArr);
     let code = '<img id="mvi-thumb-data" src="' +
         thumbPhoto +
         '"/><br/>\n';
@@ -368,8 +393,8 @@ var createfilm = async (href, snippet, episode) => {
         '</div>\n';
     code += '<div id="mvi-trailer-data"></div>\n';
     let newDiv = '';
-    for (let i = 1; i <= episode; i++) {
-        newDiv += '<id data-src="' + domainHeroku + 'api/getfb?type=bo&play=">Tập ' + i + '</id>\n'
+    for (let i = 0; i < linkXemArr.length; i++) {
+        newDiv += '<id data-src="http://get-phim-tool.herokuapp.com/api/phim?url=' + linkXemArr[i].href + '&domain=bilutv&server=st">Tập ' + linkXemArr[i].episode + '</id>\n'
     }
     code += '<div id="mvi-link-data">\n' + newDiv + '</div>'
     return {
@@ -432,8 +457,7 @@ router.get('/updatefilm', function (req, res, next) {
 router.get('/getblog', function (req, res, next) {
     let idPost = req.query.idPost;
     let token = req.query.token;
-    let fromEpisode = parseInt(req.query.fromEpisode);
-    let toEpisode = parseInt(req.query.toEpisode);
+    let href = req.query.href;
     let options = {
         method: 'GET',
         uri: 'https://www.googleapis.com/blogger/v3/blogs/144199127316688870/posts/' + idPost,
@@ -448,17 +472,46 @@ router.get('/getblog', function (req, res, next) {
         let $ = cheerio.load(content, {
             decodeEntities: false
         });
-        let mviLinkData = $('#mvi-link-data').html();
-        let newEp = '';
-        for (let i = fromEpisode + 1; i <= toEpisode; i++) {
-            newEp += '<id data-src="' + domainHeroku + 'api/getfb?type=bo&play=">Tập ' + i + '</id>\n';
+        let options1 = {
+            method: 'GET',
+            uri: href
         }
-        $('#mvi-link-data').html(mviLinkData + newEp);
-        let newContent = $('body').html();
-        return res.json({
-            success: true,
-            data: newContent
+        rp(options1).then(content1 => {
+            let $1 = cheerio.load(content1, {
+                decodeEntities: false
+            });
+            let linkXem = 'http://bilutv.com' + $1(".btn-see").first().attr("href");
+            let options1 = {
+                method: 'GET',
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+                },
+                uri: linkXem
+            }
+            rp(options1).then(contentXem => {
+                let $5 = cheerio.load(contentXem, {
+                    decodeEntities: false
+                });
+                let listEpisodes = $5("#list_episodes").html();
+                return res.json({
+                    success: true,
+                    oldData: content,
+                    newData: listEpisodes
+                })
+            }, err => {
+                return res.json({
+                    success: false,
+                    data: err
+                })
+            })
+
+        }, err => {
+            return res.json({
+                success: false,
+                data: err
+            })
         })
+
     }, err => {
         return res.json({
             success: false,
@@ -467,7 +520,6 @@ router.get('/getblog', function (req, res, next) {
     })
 
 })
-
 
 
 router.post('/postblog', function (req, res, next) {
