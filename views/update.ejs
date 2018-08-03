@@ -18,7 +18,7 @@
         <button type="button" class="btn btn-danger" style="" id="get-film">Get phim</button>
     </div>
     <div class="form-group" id="info-post">
-            <button id="update-phim" type="button" class="btn btn-primary" >Update phim</button>
+        <button id="update-phim" type="button" class="btn btn-primary">Update phim</button>
     </div>
     <script>
         let originalHtml = '';
@@ -33,23 +33,24 @@
             let fromEpisode = urlParams.get('fromEpisode');
             let toEpisode = urlParams.get('toEpisode');
             let idPost = urlParams.get('idPost');
+            let href = urlParams.get('href');
             $.ajax({
-                url: 'https://get-phim-tool.herokuapp.com/api/getblog?token=' + token + '&idPost=' + idPost +
-                    '&fromEpisode=' + fromEpisode + '&toEpisode=' + toEpisode,
+                url: 'http://localhost:3030/api/getblog?token=' + token + '&idPost=' + idPost +
+                    '&fromEpisode=' + fromEpisode + '&toEpisode=' + toEpisode +'&href='+href ,
                 method: "GET",
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
                 success: function (response) {
                     if (response.success) {
-                        originalHtml = response.data
+                        originalHtml = response.oldData
                         $('#info-post').append(
-                            '<textarea class="form-control" id="html" rows="4" cols="50" style="width: 800px;height: 500px">' +
-                            response.data + '</textarea>')
-                        // $('#info-post').append(
-                        //     '<button id="update-phim" type="button" class="btn btn-primary" >Update phim</button>'
-                        // )
+                            '<textarea class="form-control" id="html-old" rows="4" cols="50" style="width: 800px;height: 500px">' +
+                            response.oldData + '</textarea>')
+                        $('#info-post').append(
+                            '<textarea class="form-control" id="html-new" rows="4" cols="50" style="width: 800px;height: 500px">' +
+                            response.newData + '</textarea>')
                     } else {
-                        alert('Lấy post thất bại!')
+                        alert('Lấy post thất bại! ',response.data)
                     }
 
                 },
@@ -60,7 +61,7 @@
         })
 
         $('#update-phim').click(() => {
-            let currentHTML = $('#html').val();
+            let currentHTML = $('#html-old').val();
             if (currentHTML === originalHtml) {
                 alert('Chỉnh sửa ID Facebook đã!')
             } else {
@@ -72,18 +73,20 @@
                     html: currentHTML
                 }
                 $.ajax({
-                    url: 'https://get-phim-tool.herokuapp.com/api/updateblog?token=' + token + '&idPost=' + idPost,
+                    url: 'http://localhost:3030/api/updateblog?token=' + token + '&idPost=' + idPost,
                     type: "POST",
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(body),
                     dataType: "json",
                     success: function (response) {
-                        if(response.success){
-                            $('#html').attr('style','background-color:green;width: 800px;height: 500px');
+                        if (response.success) {
+                            $('#html').attr('style',
+                                'background-color:green;width: 800px;height: 500px');
                         } else {
-                            $('#html').attr('style','background-color:red;width: 800px;height: 500px');
+                            $('#html').attr('style',
+                                'background-color:red;width: 800px;height: 500px');
                         }
-                    
+
                     },
                     error: function (err) {
                         alert('Update post thất bại!')
