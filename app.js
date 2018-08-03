@@ -156,7 +156,7 @@ var createNewFilm = (objFilm) => {
     return transporter.sendMail(mailOptions);
 }
 
-var updateFilm = (newObjFilm, oldObjFilm) => {
+var updateFilm = (newObjFilm) => {
     console.log('update roi`')
     let titleFilm = newObjFilm.title;
     if (titleFilm) {
@@ -186,7 +186,7 @@ var updateFilm = (newObjFilm, oldObjFilm) => {
                     fromEpisode = $('#mvi-status-data').text().replace(']','');
                 }
                 fromEpisode = processSnippet(fromEpisode);
-                let link = domainHeroku + 'api/updatefilm?idPost=' + updateId + '&fromEpisode=' + fromEpisode + '&toEpisode=' + newObjFilm.episode;
+                let link = domainHeroku + 'api/updatefilm?idPost=' + updateId + '&href='+newObjFilm.href;;
                 link = encodeURI(link);
                 let mailOptions = {
                     from: 'thienanhnguyen00009@gmail.com', // sender address
