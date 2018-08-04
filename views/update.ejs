@@ -35,7 +35,7 @@
             let idPost = urlParams.get('idPost');
             let href = urlParams.get('href');
             $.ajax({
-                url: 'http://localhost:3030/api/getblog?token=' + token + '&idPost=' + idPost +
+                url: 'https://get-phim-tool.herokuapp.com/api/getblog?token=' + token + '&idPost=' + idPost +
                     '&fromEpisode=' + fromEpisode + '&toEpisode=' + toEpisode +'&href='+href ,
                 method: "GET",
                 contentType: 'application/json; charset=utf-8',
@@ -70,7 +70,7 @@
                     html: currentHTML
                 }
                 $.ajax({
-                    url: 'http://localhost:3030/api/updateblog?token=' + token + '&idPost=' + idPost,
+                    url: 'https://get-phim-tool.herokuapp.com/api/updateblog?token=' + token + '&idPost=' + idPost,
                     type: "POST",
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(body),
