@@ -9,8 +9,13 @@ var https = followRedirects.https;
 var cheerio = require('cheerio');
 var Crawler = require("crawler");
 var Film = require('./model');
+var get_ip = require('ipware')().get_ip;
 var access_token = 'EAAZA5TUfQPxcBADeYgJY9m45LZCCBzxZBrldWru5VRkrx1RFs7bYiZCZBheZAjFZAAePAvZBLtl86MyNFADoaHlZC6sK30WBgnMqDpLsWllY1NzyEGQ2XiWYkZCP1z9G0xawNATOlAhxwI1cgGQjeNu6lBFddjns6NZBlKCJpQETFpoCZCw8a21VW8fhUWbxfn7IZBZBEZD'
 
+router.get('/ip', function (req, res, next) {
+    var ip_info = get_ip(req);
+    return ip_info;
+})
 
 router.get('/phim', function (req, res, next) {
     let domain = req.query.domain;
