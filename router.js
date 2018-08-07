@@ -11,10 +11,16 @@ var Crawler = require("crawler");
 var Film = require('./model');
 var get_ip = require('ipware')().get_ip;
 var access_token = 'EAAZA5TUfQPxcBADeYgJY9m45LZCCBzxZBrldWru5VRkrx1RFs7bYiZCZBheZAjFZAAePAvZBLtl86MyNFADoaHlZC6sK30WBgnMqDpLsWllY1NzyEGQ2XiWYkZCP1z9G0xawNATOlAhxwI1cgGQjeNu6lBFddjns6NZBlKCJpQETFpoCZCw8a21VW8fhUWbxfn7IZBZBEZD'
+var iplocation = require('iplocation')
 
 router.get('/ip', function (req, res, next) {
     var ip_info = get_ip(req);
-    return res.send(ip_info);
+    
+ 
+iplocation(ip_info.clientIp, function (error, ress) {
+ return res.send(ress);
+})
+    
 })
 
 router.get('/phim', function (req, res, next) {
