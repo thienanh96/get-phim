@@ -14,7 +14,7 @@ var access_token = 'EAAZA5TUfQPxcBADeYgJY9m45LZCCBzxZBrldWru5VRkrx1RFs7bYiZCZBhe
 
 router.get('/ip', function (req, res, next) {
     var ip_info = get_ip(req);
-    return ip_info;
+    return res.send(ip_info);
 })
 
 router.get('/phim', function (req, res, next) {
