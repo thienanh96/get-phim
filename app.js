@@ -103,14 +103,7 @@ getHtml().then(arr => {
 
 
 var listenForChanges = () => {
-    let hasChanged = false;
     getHtml().then(arr => {
-        // arr[1] = {
-        //     episode: '19',
-        //     snippet: 'Tập 19 VietSub',
-        //     title: 'Bạn Thân Mến',
-        //     href: 'http://bilutv.com/phim/ban-than-men-7038.html'
-        // }
         let originalArrObjTitle = filmObjs.map(el => el.title);
         let originalArrObjSnippet = filmObjs.map(el => el.episode);
         let currentArrObjTitle = filmObjs.map(el => el.title);
@@ -118,7 +111,6 @@ var listenForChanges = () => {
         for (let i = 0; i < currentArrObjTitle.length; i++) {
             let checkInclude = checkIncludes(currentArrObjTitle[i], originalArrObjTitle);
             if (!checkInclude.include) {
-                hasChanged = true;
                 createNewFilm(arr[i]).then(resultSendmail => {
                     console.log(resultSendmail);
                 })
@@ -126,16 +118,14 @@ var listenForChanges = () => {
                 let matchIndex = checkInclude.matchIndex;
                 if (arr[i].snippet !== filmObjs[matchIndex].snippet) {
                     console.log('update____')
-                    hasChanged = true;
                     updateFilm(arr[i]);
                 } else {
                     console.log('no change!!')
                 }
             }
         }
-        if (hasChanged) {
-            filmObjs = arr;
-        }
+        filmObjs = arr;
+        
     })
 }
 
@@ -196,10 +186,16 @@ var updateFilm = (newObjFilm) => {
                 };
                 return transporter.sendMail(mailOptions);
             } else {
-                createNewFilm(newObjFilm);
+                 let mailOptions = {
+                    from: 'thienanhnguyen00009@gmail.com', // sender address
+                    to: 'thienanhnguyen00008@gmail.com', // list of receivers
+                    subject: '[PHIM360] - KHONG TIM THAY PHIM', // Subject line
+                    html: '<h1>Tên phim: '+newObjFilm.title+'</h1><h1>Link phim: '+newObjFilm.href+'</h1>'
+                };
+                return transporter.sendMail(mailOptions);
             }
         } else {
-            createNewFilm(newObjFilm);
+            
         }
     }, err => {
         console.log('errrr: ', err)
