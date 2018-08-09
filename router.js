@@ -561,7 +561,7 @@ router.post('/postblog', function (req, res, next) {
 
 router.post('/updateblog', function (req, res, next) {
     let newContent = req.body.html;
-    console.log('newc: ',newContent)
+    let date = new Date();
     let token = req.query.token + '';
     let idPost = req.query.idPost;
     let options = {
@@ -574,7 +574,8 @@ router.post('/updateblog', function (req, res, next) {
             'Authorization': 'Bearer ' + token
         },
         body: {
-            content: newContent
+            content: newContent,
+            published: date.toISOString();
         }
     };
     rp(options).then(result => {
