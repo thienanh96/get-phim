@@ -575,7 +575,7 @@ router.post('/updateblog', function (req, res, next) {
         },
         body: {
             content: newContent,
-            published: date.toISOString();
+            published: date.toISOString()
         }
     };
     rp(options).then(result => {
