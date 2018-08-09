@@ -131,7 +131,7 @@ var listenForChanges = () => {
 
 setInterval(function () {
     listenForChanges();
-}, 14400000);
+}, 1000*3600*12);
 
 var createNewFilm = (objFilm) => {
     console.log('create', objFilm);
@@ -186,13 +186,6 @@ var updateFilm = (newObjFilm) => {
                 };
                 return transporter.sendMail(mailOptions);
             } else {
-                 let mailOptions = {
-                    from: 'thienanhnguyen00009@gmail.com', // sender address
-                    to: 'thienanhnguyen00008@gmail.com', // list of receivers
-                    subject: '[PHIM360] - KHONG TIM THAY PHIM', // Subject line
-                    html: '<h1>Tên phim: '+newObjFilm.title+'</h1><h1>Link phim: '+newObjFilm.href+'</h1>'
-                };
-                return transporter.sendMail(mailOptions);
             }
         } else {
             
