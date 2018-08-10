@@ -116,9 +116,9 @@ var listenForChanges = () => {
                 })
             } else {
                 let matchIndex = checkInclude.matchIndex;
-                if (arr[i].snippet !== filmObjs[matchIndex].snippet) {
+                if (arr[i].snippet.trim() !== filmObjs[matchIndex].snippet.trim()) {
                     console.log('update____')
-                    updateFilm(arr[i]);
+                    updateFilm(arr[i],filmObjs[matchIndex].snippet.trim());
                 } else {
                     console.log('no change!!')
                 }
@@ -146,7 +146,7 @@ var createNewFilm = (objFilm) => {
     return transporter.sendMail(mailOptions);
 }
 
-var updateFilm = (newObjFilm) => {
+var updateFilm = (newObjFilm, oldSnippet) => {
     console.log('update roi`')
     let titleFilm = newObjFilm.title;
     if (titleFilm) {
@@ -182,7 +182,7 @@ var updateFilm = (newObjFilm) => {
                     from: 'thienanhnguyen00009@gmail.com', // sender address
                     to: 'thienanhnguyen00008@gmail.com', // list of receivers
                     subject: '[PHIM360] - Có sự thay đổi - CẬP NHẬT PHIM, THÊM TẬP MỚI', // Subject line
-                    html: '<h1>Tên phim: '+newObjFilm.title+'</h1><h1>Link phim: '+newObjFilm.href+'</h1<h1>CLICK:</h1><p>' + link + '</p>'
+                    html: '<h1>Tên phim: '+newObjFilm.title+'</h1><h1>Chi tiết thay đổi: from '+oldSnippet+' to '+newObjFilm.snippet.trim()+' </h1><h1>Link phim: '+newObjFilm.href+'</h1<h1>CLICK:</h1><p>' + link + '</p>'
                 };
                 return transporter.sendMail(mailOptions);
             } else {
