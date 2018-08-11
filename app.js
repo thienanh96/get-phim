@@ -106,7 +106,7 @@ var listenForChanges = () => {
     getHtml().then(arr => {
         let originalArrObjTitle = filmObjs.map(el => el.title);
         let originalArrObjSnippet = filmObjs.map(el => el.episode);
-        let currentArrObjTitle = filmObjs.map(el => el.title);
+        let currentArrObjTitle = arr.map(el => el.title);
         let currentArrObjSnippet = arr.map(el => el.episode);
         for (let i = 0; i < currentArrObjTitle.length; i++) {
             let checkInclude = checkIncludes(currentArrObjTitle[i], originalArrObjTitle);
