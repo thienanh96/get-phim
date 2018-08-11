@@ -116,9 +116,10 @@ var listenForChanges = () => {
                 })
             } else {
                 let matchIndex = checkInclude.matchIndex;
-                if (arr[i].snippet.trim() !== filmObjs[matchIndex].snippet.trim()) {
+                let oldSnippet = filmObjs[matchIndex].snippet.trim();
+                if (arr[i].snippet.trim() !== oldSnippet)) {
                     console.log('update____')
-                    updateFilm(arr[i],filmObjs[matchIndex].snippet.trim());
+                    updateFilm(arr[i],oldSnippet);
                 } else {
                     console.log('no change!!')
                 }
