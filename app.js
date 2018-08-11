@@ -132,7 +132,7 @@ var listenForChanges = () => {
 
 setInterval(function () {
     listenForChanges();
-}, 1000*3600*12);
+}, 1000*3600*8);
 
 var createNewFilm = (objFilm) => {
     console.log('create', objFilm);
