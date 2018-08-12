@@ -134,8 +134,7 @@ setInterval(function () {
     listenForChanges();
 }, 1000*3600*8);
 
-var createNewFilm = (objFilm) => {
-    console.log('create', objFilm);
+var createNewFilm = (objFilm) => {    
     let link = domainHeroku + 'api/createfilm?snippet=' + objFilm.snippet + '&href=' + objFilm.href + '&episode=' + objFilm.episode;
     link = encodeURI(link);
     let mailOptions = {
