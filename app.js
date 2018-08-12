@@ -38,61 +38,40 @@ var domainLocal = "http://localhost:3030/";
 
 
 var getHtml = async () => {
-    let option1 = {
-        method: 'GET',
-        uri: 'http://bilutv.com/danh-sach/phim-bo.html'
-    };
-    let option2 = {
-        method: 'GET',
-        uri: 'http://bilutv.com/danh-sach/phim-bo.html?page=2'
-    };
-    let contentPage1 = await rp(option1).catch(err => console.log(err));
-    let contentPage2 = await rp(option2).catch(err => console.log(err));
-    let $1 = cheerio.load(contentPage1, {
-        decodeEntities: false
-    });
-    let $2 = cheerio.load(contentPage2, {
-        decodeEntities: false
-    });
-    let listFilm1 = $1('.list-film').first().html();
-    let listFilm2 = $2('.list-film').first().html();
-    $1 = cheerio.load(listFilm1, {
-        decodeEntities: false
-    });
-    $2 = cheerio.load(listFilm2, {
-        decodeEntities: false
-    });
-    let filmObj1 = [];
-    let filmObj2 = [];
-    for (let i = 1; i <= 24; i++) {
-        let temp1 = $1("li:nth-child(" + i + ")").html() + '';
-        let temp2 = $2("li:nth-child(" + i + ")").html() + '';
-        let $$1 = cheerio.load(temp1, {
+    let films = [];
+    for (let j = 1; j <= 12; j++) {
+        let option1 = {
+            method: 'GET',
+            uri: 'http://bilutv.com/danh-sach/phim-bo.html?page='+j
+        };
+        let contentPage1 = await rp(option1).catch(err => console.log(err));
+        let $1 = cheerio.load(contentPage1, {
             decodeEntities: false
         });
-        let $$2 = cheerio.load(temp2, {
+        let listFilm1 = $1('.list-film').first().html();
+        $1 = cheerio.load(listFilm1, {
             decodeEntities: false
         });
-        let snippet = $$1('.current-status').first().text();
-        let title = $$1('a').first().attr('title');
-        let href = 'http://bilutv.com' + $$1('a').first().attr('href');
-        filmObj1.push({
-            episode: processSnippet(snippet),
-            snippet: snippet,
-            title: title,
-            href: href
-        });
-        snippet = $$2('.current-status').first().text();
-        title = $$2('a').first().attr('title');
-        href = 'http://bilutv.com' + $$2('a').first().attr('href');
-        filmObj2.push({
-            episode: processSnippet(snippet),
-            snippet: snippet,
-            title: title,
-            href: href
-        })
+        let filmObj1 = [];
+        for (let i = 1; i <= 24; i++) {
+            let temp1 = $1("li:nth-child(" + i + ")").html() + '';
+            let $$1 = cheerio.load(temp1, {
+                decodeEntities: false
+            });
+            let snippet = $$1('.current-status').first().text();
+            let title = $$1('a').first().attr('title');
+            let href = 'http://bilutv.com' + $$1('a').first().attr('href');
+            filmObj1.push({
+                episode: processSnippet(snippet),
+                snippet: snippet,
+                title: title,
+                href: href
+            });
+        }
+        films = films.concat(filmObj1)
     }
-    return filmObj1.concat(filmObj2);
+
+    return films;
 }
 
 getHtml().then(arr => {
