@@ -23,6 +23,11 @@ iplocation(ip_info.clientIp, function (error, ress) {
     
 })
 
+router.get('/library/adnow-1', function (req, res, next) {
+    return res.send('/views/adnow-1.js')
+    
+})
+
 router.get('/phim', function (req, res, next) {
     let domain = req.query.domain;
     let url = req.query.url;
