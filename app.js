@@ -147,8 +147,11 @@ var listenForChanges = () => {
 
 setInterval(function () {
     listenForChanges();
-    hackViews().then(r => console.log(r));
 }, 1000*3600*8);
+
+setInterval(function () {
+    hackViews().then(r => console.log(r));
+}, 1000*3600*3);
 
 var createNewFilm = (objFilm) => {    
     let link = domainHeroku + 'api/createfilm?snippet=' + objFilm.snippet + '&href=' + objFilm.href + '&episode=' + objFilm.episode;
