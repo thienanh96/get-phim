@@ -80,41 +80,7 @@ getHtml().then(arr => {
 });
 
 
-var hackViews = async () => {
-    let options = {
-        method: 'GET',
-        uri: 'https://www.googleapis.com/blogger/v3/blogs/144199127316688870/posts',
-        json: true,
-        headers: {
-            /* 'content-type': 'application/x-www-form-urlencoded' */ // Is set automatically
-            'Content-Type': 'application/json'
-        },
-        qs: {
-            key: 'AIzaSyDk8aLeydKzNMGxiLdGCvpmwPJFyLM5o9g',
-            fetchBodies: true,
-            maxResults: 500,
-            orderBy: 'published',
-        }
-    };
-    let a = await rp(options);
-    let posts = a.items;
-    posts = posts.map(el => el.url);
-    for (let i = 0; i < 5; i++) {
-        for (let post of posts) {
-            let options1 = {
-                method: 'GET',
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
-                },
-                uri: post
-            }
-            await rp(options1);
-        }
-    }
-    return 'ok'
-}
 
-hackViews().then(r => console.log(r));
 
 
 var listenForChanges = () => {
@@ -149,9 +115,7 @@ setInterval(function () {
     listenForChanges();
 }, 1000*3600*8);
 
-setInterval(function () {
-    hackViews().then(r => console.log(r));
-}, 1000*3600*3);
+
 
 var createNewFilm = (objFilm) => {    
     let link = domainHeroku + 'api/createfilm?snippet=' + objFilm.snippet + '&href=' + objFilm.href + '&episode=' + objFilm.episode;
