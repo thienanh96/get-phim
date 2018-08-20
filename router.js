@@ -89,6 +89,7 @@ router.get('/phim', function (req, res, next) {
                             indexServerSb = arrServer.indexOf('sb');
                         }
                         returnLink = arrLink[indexServerSb];
+                        console.log('return:  ',returnLink);
                         if (returnLink && returnLink.includes('http://')) {
                             http.get(returnLink, function (response) {
                                 return chooseTemplate(response.responseUrl.replace('http:','https:'), res);
