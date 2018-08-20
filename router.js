@@ -190,52 +190,45 @@ var getFilmfromFB = (idFilm) => {
 router.get('/getfb', function (req, res, next) {
     let idFilm = req.query.play + '';
     
-    getFilmfromFB(idFilm).then(filmObj => {
-        let newSource = filmObj.source;
-        return res.render('index.ejs', {
-           src: newSource
-        })
+    Film.getFilm(idFilm).then(film => {
+        if (film) {
+            let timeFilm = film.time;
+            if (Date.now() - timeFilm > 1000*3600*2) {
+                getFilmfromFB(idFilm).then(filmObj => {
+                    if (filmObj.source) {
+                        let newSource = filmObj.source;
+                        Film.updateFilm(idFilm, {
+                            source: newSource,
+                            time: Date.now()
+                        }).then(updatedFilm => {
+                            console.log('update thanh cong: ', updatedFilm);
+                            return res.render('index.ejs', {
+                                src: updatedFilm.source
+                            })
+                        }, err => {
+                            return res.render('index.ejs', {
+                                src: film.source
+                            })
+                        })
+                    }
+                }, err => {
+                    return res.render('index3.ejs', {
+                        src: ''
+                    })
+                })
+            } else {
+                return res.render('index.ejs', {
+                    src: film.source
+                })
+            }
+        } else {
+            return res.render('index3.ejs', {
+                src: ''
+            })
+        }
+    }, err => {
+        console.log('err: ', err);
     })
-    
-//     Film.getFilm(idFilm).then(film => {
-//         if (film) {
-//             let timeFilm = film.time;
-//             if (Date.now() - timeFilm > 1000*3600*2) {
-//                 getFilmfromFB(idFilm).then(filmObj => {
-//                     if (filmObj.source) {
-//                         let newSource = filmObj.source;
-//                         Film.updateFilm(idFilm, {
-//                             source: newSource,
-//                             time: Date.now()
-//                         }).then(updatedFilm => {
-//                             console.log('update thanh cong: ', updatedFilm);
-//                             return res.render('index.ejs', {
-//                                 src: updatedFilm.source
-//                             })
-//                         }, err => {
-//                             return res.render('index.ejs', {
-//                                 src: film.source
-//                             })
-//                         })
-//                     }
-//                 }, err => {
-//                     return res.render('index3.ejs', {
-//                         src: ''
-//                     })
-//                 })
-//             } else {
-//                 return res.render('index.ejs', {
-//                     src: film.source
-//                 })
-//             }
-//         } else {
-//             return res.render('index3.ejs', {
-//                 src: ''
-//             })
-//         }
-//     }, err => {
-//         console.log('err: ', err);
-//     })
 })
 
 router.get('/uploadfilm', function (req, res, next) {
