@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var uriLocal = 'mongodb://localhost:27017/phim360';
-var uriMlab = 'mongodb://thienanhnguyen06:Anh22051996@ds259241.mlab.com:59241/heroku_lplqzd1d'
+var uriMlab = 'mongodb://thienanhnguyen06:Anh22051996@ds125422.mlab.com:25422/heroku_ph8gv6ng
+//ds259241.mlab.com:59241/heroku_lplqzd1d'
 //Lets connect to our database using the DB server URL.
 mongoose.connect(uriMlab,{ useNewUrlParser: true });
 mongoose.connection.on('connected',() => {
