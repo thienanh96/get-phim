@@ -23,6 +23,7 @@ iplocation(ip_info.clientIp, function (error, ress) {
     
 })
 
+
 router.get('/library/adnow-1', function (req, res, next) {
     return res.sendFile('views/adnow-1.js', { root : __dirname})
     
