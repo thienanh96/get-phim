@@ -32,22 +32,12 @@ router.get('/library/adnow-1', function (req, res, next) {
 router.get('/phim', function (req, res, next) {
     let domain = req.query.domain;
     let url = req.query.url;
-    let requestOption = {};
+    let requestOption = '';
     let server = req.query.server;
     if(server +'' === 'sb'){
-        requestOption = {
-            method: 'POST',
-            uri: 'http://phim360.xyz/index.php',
-            json: true,
-            body: {
-                bodyy: url
-            }
-        }
+        requestOption = 'http://www.phim360.xyz/index.php?url=' +url;
     } else {
-        requestOption = {
-            method: 'GET',
-            uri: url
-        }
+        requestOption = url;
     }
     if (domain === 'phimmoi') {
         return chooseTemplate('', res);
