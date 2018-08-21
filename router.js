@@ -66,7 +66,6 @@ router.get('/phim', function (req, res, next) {
         let passBilu = domain + '.com' + '4590481877' + mId[1];
         request(requestOption, (error, response, body) => {
             body += '';
-            console.log('check respones',body);
             if (!error) {
                 let arrFile = body.match(/"file":"([^"]+)"/g);
                 let arrServer = body.match(/("server":"\w+")/g);
