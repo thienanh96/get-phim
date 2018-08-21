@@ -32,8 +32,23 @@ router.get('/library/adnow-1', function (req, res, next) {
 router.get('/phim', function (req, res, next) {
     let domain = req.query.domain;
     let url = req.query.url;
+    let requestOption = {};
     let server = req.query.server;
-
+    if(server +'' === 'sb'){
+        requestOption = {
+            method: 'POST',
+            uri: 'http://phim360.xyz/index.php',
+            json: true,
+            body: {
+                bodyy: url
+            }
+        }
+    } else {
+        requestOption = {
+            method: 'GET',
+            uri: url
+        }
+    }
     if (domain === 'phimmoi') {
         return chooseTemplate('', res);
     } else {
@@ -49,7 +64,7 @@ router.get('/phim', function (req, res, next) {
             mId = mIdphimbo;
         }
         let passBilu = domain + '.com' + '4590481877' + mId[1];
-        request(url, (error, response, body) => {
+        request(requestOption, (error, response, body) => {
             body += '';
             console.log('check respones',response);
             if (!error) {
