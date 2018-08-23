@@ -16,7 +16,7 @@
     <script>
         $('#lay-token').click(function () {
             window.location =
-                "https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=513153404181-o8flq7gdlueq838kion0541acqtp9iih.apps.googleusercontent.com&redirect_uri=http://localhost:3010&scope=https://www.googleapis.com/auth/blogger";
+                "https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=513153404181-o8flq7gdlueq838kion0541acqtp9iih.apps.googleusercontent.com&redirect_uri=https://get-phim-tool.herokuapp.com/api/updatefilm&scope=https://www.googleapis.com/auth/blogger";
         })
         $(document).ready(function () {
             let token = window.location.hash.substr(1);
