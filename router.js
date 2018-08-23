@@ -425,9 +425,14 @@ var updateFilm = async (newObjFilm,token) => {
                     }
                 }                
             } else {
+                    return {
+                        success: true
+                    }
             }
         } else {
-            
+                    return {
+                        success: true
+                    }
         }
 
 
@@ -779,7 +784,7 @@ var capnhaPhimRoute = async (token) => {
     let fail = 0;
     for(let savedPost of savedFilmObj){
         let result = await updateFilm(savedPost,token);
-        if(result.success){
+        if(result.success === true){
             success++;
         } else {
             fail++;
