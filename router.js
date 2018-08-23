@@ -10,9 +10,18 @@ var cheerio = require('cheerio');
 var Crawler = require("crawler");
 var Film = require('./model');
 var get_ip = require('ipware')().get_ip;
+var stringSimilarity = require('string-similarity');
 var access_token = 'EAAZA5TUfQPxcBADeYgJY9m45LZCCBzxZBrldWru5VRkrx1RFs7bYiZCZBheZAjFZAAePAvZBLtl86MyNFADoaHlZC6sK30WBgnMqDpLsWllY1NzyEGQ2XiWYkZCP1z9G0xawNATOlAhxwI1cgGQjeNu6lBFddjns6NZBlKCJpQETFpoCZCw8a21VW8fhUWbxfn7IZBZBEZD'
 var iplocation = require('iplocation')
-
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'thienanhnguyen00009@gmail.com',
+        pass: '22051996westlife'
+    }
+});
+var filmObjs = [];
 router.get('/ip', function (req, res, next) {
     var ip_info = get_ip(req);
     
@@ -281,6 +290,186 @@ router.get('/uploadfilm', function (req, res, next) {
 
 var domainHeroku = "https://get-phim-tool.herokuapp.com/";
 var domainLocal = "http://localhost:3030/";
+
+var getHtml = async () => {
+    let films = [];
+    for (let j = 1; j <= 12; j++) {
+        let option1 = {
+            method: 'GET',
+            uri: 'http://bilutv.com/danh-sach/phim-bo.html?page='+j
+        };
+        let contentPage1 = await rp(option1).catch(err => console.log(err));
+        let $1 = cheerio.load(contentPage1, {
+            decodeEntities: false
+        });
+        let listFilm1 = $1('.list-film').first().html();
+        $1 = cheerio.load(listFilm1, {
+            decodeEntities: false
+        });
+        let filmObj1 = [];
+        for (let i = 1; i <= 24; i++) {
+            let temp1 = $1("li:nth-child(" + i + ")").html() + '';
+            let $$1 = cheerio.load(temp1, {
+                decodeEntities: false
+            });
+            let snippet = $$1('.current-status').first().text();
+            let title = $$1('a').first().attr('title');
+            let href = 'http://bilutv.com' + $$1('a').first().attr('href');
+            filmObj1.push({
+                episode: processSnippet(snippet),
+                snippet: snippet,
+                title: title,
+                href: href
+            });
+        }
+        films = films.concat(filmObj1)
+    }
+
+    return films;
+}
+
+getHtml().then(arr => {
+    filmObjs = arr;
+    // console.log('reee: ', filmObjs[1]);
+});
+
+
+
+var savedFilmObj = [];
+
+var listenForChanges = () => {
+    let hasChanged = false;
+    getHtml().then(arr => {
+        let originalArrObjTitle = filmObjs.map(el => el.title);
+        let originalArrObjSnippet = filmObjs.map(el => el.episode);
+        let currentArrObjTitle = arr.map(el => el.title);
+        let currentArrObjSnippet = arr.map(el => el.episode);
+        for (let i = 0; i < currentArrObjTitle.length; i++) {
+            let checkInclude = checkIncludes(currentArrObjTitle[i], originalArrObjTitle);
+            if (!checkInclude.include) {
+                createNewFilm(arr[i]).then(resultSendmail => {
+                    console.log(resultSendmail);
+                })
+            } else {
+                let matchIndex = checkInclude.matchIndex;
+                let oldSnippet = filmObjs[matchIndex].snippet.trim();
+                if (arr[i].snippet.trim() !== oldSnippet) {
+                    hasChanged = true;
+                    savedFilmObj.push(arr[i])
+                } else {
+                    console.log('no change!!')
+                }
+            }
+        }
+        if(hasChanged === true){
+                let mailOptions = {
+                    from: 'thienanhnguyen00009@gmail.com', // sender address
+                    to: 'thienanhnguyen00008@gmail.com', // list of receivers
+                    subject: '[PHIM360] - Có sự thay đổi - LẤY TOKEN', // Subject line
+                    html: '<p>'+domainHeroku+'api/updatefilm</p>'
+                };
+                return transporter.sendMail(mailOptions);
+        }
+        filmObjs = arr;
+        
+    })
+}
+
+setInterval(function () {
+    listenForChanges();
+}, 1000*3600*8);
+
+
+
+var createNewFilm = (objFilm) => {    
+    let link = domainHeroku + 'api/createfilm?snippet=' + objFilm.snippet + '&href=' + objFilm.href + '&episode=' + objFilm.episode;
+    link = encodeURI(link);
+    let mailOptions = {
+        from: 'thienanhnguyen00009@gmail.com', // sender address
+        to: 'thienanhnguyen00008@gmail.com', // list of receivers
+        subject: '[PHIM360] - Có sự thay đổi - TẠO MỚI PHIM', // Subject line
+        html: '<h1>Link: </h1><p>'+objFilm.href+'</p><h1>CLICK:</h1><p>' + link + '</p>'
+    };
+    return transporter.sendMail(mailOptions);
+}
+
+var updateFilm = async (newObjFilm,token) => {
+    console.log('update roi`')
+    let titleFilm = newObjFilm.title;
+    if (titleFilm) {
+        titleFilm = titleFilm.replace(/\\\//g, '').replace(/\?/g, '').replace(/&/g, '').replace(/#/g, '');
+    }
+    console.log('filmm: ', titleFilm)
+    let options = {
+        method: 'GET',
+        uri: encodeURI('https://www.googleapis.com/blogger/v3/blogs/144199127316688870/posts/search?q=' + titleFilm + '&key=AIzaSyDg6ATJymGVqn1N1G-_nvdsGvN_HsC4AGc&fetchBodies=true'),
+        json: true,
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+        }
+    }
+    let resultSearch = await rp(options);
+        if (resultSearch.items) { //tim thay
+            let searchNames = resultSearch.items.map(el => el.title.split('-')[0].trim());
+            let includeSearch = checkIncludes(titleFilm,searchNames);
+            if (searchNames && includeSearch.include) {
+                let updateId = resultSearch.items[includeSearch.matchIndex].id;
+                try{
+                   let result = await capnhatPhim(updateId,token,newObjFilm.href,newObjFilm.snippet.trim());
+                    return {
+                        success: true
+                    }
+                } catch(error){
+                    return {
+                        success: false
+                    }
+                }                
+            } else {
+            }
+        } else {
+            
+        }
+
+
+
+}
+
+var checkIncludes = (element, arrFilm) => {
+    let include = false;
+    let index = 0;
+    for (let el of arrFilm) {
+        if (stringSimilarity.compareTwoStrings(el, element) > 0.85) {
+            include = true;
+            break;
+        }
+        index++;
+    }
+    if (include) {
+        return {
+            include: true,
+            matchIndex: index
+        }
+    } else {
+        return {
+            include: false,
+            matchIndex: -1
+        }
+    }
+}
+
+var processSnippet = (snippet) => {
+    let arrSnippet = snippet.split(' ');
+    for (let el of arrSnippet) {
+        if (!isNaN(el)) {
+            return el
+        };
+        if (el.includes('/')) {
+            return el.split('/')[0];
+        }
+    }
+    return '';
+}
+
 
 router.get('/createfilm', function (req, res, next) {
     let href = req.query.href + '';
@@ -573,11 +762,89 @@ router.post('/postblog', function (req, res, next) {
 })
 
 router.post('/updateblog', function (req, res, next) {
-    let newContent = req.body.html;
-    let date = new Date();
-    let token = req.query.token + '';
-    let idPost = req.query.idPost;
+    let token = req.query.token;
+    capnhaPhimRoute(token).then(a => {
+        let sum = savedFilmObj.length;
+        savedFilmObj = [];
+        return res.json({
+            sum: sum,
+            success: a.success,
+            fail: a.fail
+        });
+    })
+})
+
+var capnhaPhimRoute = async (token) => {
+    let success = 0;
+    let fail = 0;
+    for(let savedPost of savedFilmObj){
+        let result = await updateFilm(savedPost,token);
+        if(result.success){
+            success++;
+        } else {
+            fail++;
+        }
+    }
+    return {
+        success: success,
+        fail: fail
+    }
+}
+var capnhatPhim = async (idPost, token, href, newSnippet) => {
     let options = {
+        method: 'GET',
+        uri: 'https://www.googleapis.com/blogger/v3/blogs/144199127316688870/posts/' + idPost,
+        headers: {
+            'Content-Type': 'application/json;',
+            'Authorization': 'Bearer ' + token,
+        },
+    };
+    let oldFilm = await rp(options);
+    let options1 = {
+        method: 'GET',
+        uri: href
+    }
+    let newContent = await rp(options1);
+    let $1 = cheerio.load(newContent, {
+        decodeEntities: false
+    });
+    let linkXem = 'http://bilutv.com' + $1(".btn-see").first().attr("href");
+    let options2 = {
+        method: 'GET',
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+        },
+        uri: linkXem
+    };
+    let contentXem = await rp(options2);
+    let $2 = cheerio.load(contentXem, {
+        decodeEntities: false
+    });
+    let linkXemArr = [];
+    let numberOfLiTag = $2("#list_episodes li").length;
+    for (let i = 1; i <= numberOfLiTag; i++) {
+        let link = $2("#list_episodes li:nth-child(" + i + ")").html();
+        let $$ = cheerio.load(link, {
+            decodeEntities: false
+        });
+        linkXemArr.push({
+            href: 'http://bilutv.com' + $$("a").first().attr("href"),
+            episode: $$("a").first().text()
+        })
+    }
+    let updateContent = '\n';
+    for (let i = linkXemArr.length; i >= 1; i--) {
+        updateContent += '<id data-src="http://get-phim-tool.herokuapp.com/api/phim?url=' + linkXemArr[i-1].href.trim() + '&domain=bilutv&server=st">Tập ' + linkXemArr[i-1].episode.trim() + '</id>\n'
+    }
+    oldFilm = JSON.parse(oldFilm);
+    let $6 = cheerio.load(oldFilm.content, {
+        decodeEntities: false
+    });
+    $6('#mvi-status-data').first().text('['+newSnippet.trim()+']');
+    $6('#mvi-res-data').first().text(newSnippet.trim()+'');
+    $6('#mvi-link-data').first().text(updateContent);
+    let date = new Date();
+    let options3 = {
         method: 'PATCH',
         rejectUnauthorized: false,
         uri: 'https://www.googleapis.com/blogger/v3/blogs/144199127316688870/posts/' + idPost,
@@ -587,22 +854,12 @@ router.post('/updateblog', function (req, res, next) {
             'Authorization': 'Bearer ' + token
         },
         body: {
-            content: newContent,
+            content: $6('body').html()+'',
             published: date.toISOString()
         }
     };
-    rp(options).then(result => {
-        return res.json({
-            success: true,
-            data: result
-        })
-    }, err => {
-        return res.json({
-            success: false,
-            data: err
-        })
-    })
-})
+    return await rp(options3);
 
+}
 
 module.exports = router
