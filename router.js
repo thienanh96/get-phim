@@ -771,6 +771,13 @@ router.post('/updateblog', function (req, res, next) {
     capnhaPhimRoute(token).then(a => {
         let sum = savedFilmObj.length;
         savedFilmObj = [];
+        let mailOptions = {
+            from: 'thienanhnguyen00009@gmail.com', // sender address
+            to: 'thienanhnguyen00008@gmail.com', // list of receivers
+            subject: '[PHIM360] - KẾT QUẢ CẬP NHẬT', // Subject line
+            html: '<div>Tổng: <div>' + sum + '</div></div><div>Thành công: <div>' + a.success + '</div></div><div>Thất bại: <div>' + a.fail + '</div></div>'
+        };
+        transporter.sendMail(mailOptions);
         return res.json({
             sum: sum,
             success: a.success,
