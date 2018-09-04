@@ -771,7 +771,6 @@ router.post('/updateblog', function (req, res, next) {
     let token = req.query.token;
     capnhaPhimRoute(token).then(a => {
         let sum = savedFilmObj.length;
-        savedFilmObj = [];
         let mailOptions = {
             from: 'thienanhnguyen00009@gmail.com', // sender address
             to: 'thienanhnguyen00008@gmail.com', // list of receivers
@@ -790,14 +789,17 @@ router.post('/updateblog', function (req, res, next) {
 var capnhaPhimRoute = async (token) => {
     let success = 0;
     let fail = 0;
+    let tempSavedFilmObj = [];
     for(let savedPost of savedFilmObj){
         let result = await updateFilm(savedPost,token);
         if(result.success === true){
             success++;
         } else {
             fail++;
+            tempSavedFilmObj.push(savedPost);
         }
     }
+    savedFilmObj = tempSavedFilmObj;
     return {
         success: success,
         fail: fail
