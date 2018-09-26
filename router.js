@@ -108,10 +108,11 @@ router.get('/phim', function (req, res, next) {
                             indexServerSb = arrServer.indexOf('cs');
                         }
                         returnLink = arrLink[indexServerSb];
-                        console.log('return:  ',returnLink);
                         if (returnLink && returnLink.includes('http://')) {
                             http.get(returnLink, function (response) {
+                                console.log('last check: ',response.responseUrl);
                                 return chooseTemplate(response.responseUrl, res);
+                               
 //                                 if (!response.responseUrl.includes('fbcdn.net')) {
 //                                     return chooseTemplate('', res);
 //                                 } else {
@@ -129,6 +130,7 @@ router.get('/phim', function (req, res, next) {
                         }
                         if (returnLink && returnLink.includes('https://')) {
                             https.get(returnLink, function (response) {
+                                console.log('last check: ',response.responseUrl);
                                 return chooseTemplate(response.responseUrl, res);
 //                                 if (!response.responseUrl.includes('fbcdn.net')) {
 //                                     return chooseTemplate('', res);
