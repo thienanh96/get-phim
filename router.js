@@ -102,7 +102,7 @@ router.get('/phim', function (req, res, next) {
                             indexServerSb = arrServer.indexOf('st');
                         }
                         if(server+''=== 'st'){
-                            indexServerSb = arrServer.indexOf('sb');
+                            indexServerSb = arrServer.indexOf('cs'); //fix ở đây
                         }
                         if(server + '' === 'cs'){
                             indexServerSb = arrServer.indexOf('cs');
@@ -110,21 +110,15 @@ router.get('/phim', function (req, res, next) {
                         returnLink = arrLink[indexServerSb];
                         if (returnLink && returnLink.includes('http://')) {
                             request(returnLink, (error, response, body) => {
-                                console.log('checkkk___',body);
+                                return chooseTemplate(body[0].file, res);
                             })
-                            http.get(returnLink, function (response) {
-                                return chooseTemplate(response.responseUrl, res);
-                                   
-//                                 if (!response.responseUrl.includes('fbcdn.net')) {
-//                                     return chooseTemplate('', res);
-//                                 } else {
-//                                     return chooseTemplate(response.responseUrl, res);
+//                             http.get(returnLink, function (response) {
+//                                 return chooseTemplate(response.responseUrl, res);
+                                  
+//                             }).on('error', function (err) {
+//                                 return chooseTemplate('', res);
 
-//                                 }
-                            }).on('error', function (err) {
-                                return chooseTemplate('', res);
-
-                            });
+//                             });
                         }
                         if (!returnLink) {
                             return chooseTemplate('', res);
@@ -132,21 +126,14 @@ router.get('/phim', function (req, res, next) {
                         }
                         if (returnLink && returnLink.includes('https://')) {
                             request(returnLink, (error, response, body) => {
-                                console.log('checkkk___',body);
+                                return chooseTemplate(body[0].file, res);
                             })
-                            https.get(returnLink, function (response) {
-                                return chooseTemplate(response.responseUrl, res);
-//                                 if (!response.responseUrl.includes('fbcdn.net')) {
-//                                     return chooseTemplate('', res);
+//                             https.get(returnLink, function (response) {
+//                                 return chooseTemplate(response.responseUrl, res);
+//                             }).on('error', function (err) {
+//                                 return chooseTemplate('', res);
 
-//                                 } else {
-//                                     return chooseTemplate(response.responseUrl, res);
-
-//                                 }
-                            }).on('error', function (err) {
-                                return chooseTemplate('', res);
-
-                            });
+//                             });
                         }
 
                     } else {
