@@ -97,7 +97,7 @@ router.get('/phim', function (req, res, next) {
                     }
                     let returnLink;
                     let indexServerSb = '';
-                    if (server + '' === 'sb' || server + '' === 'cs') {
+                    if (server + '' === 'sb' || server + '' === 'st' || server + '' === 'cs') {
                         if(server+''=== 'sb'){
                             indexServerSb = arrServer.indexOf('st');
                         }
