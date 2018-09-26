@@ -97,7 +97,7 @@ router.get('/phim', function (req, res, next) {
                     }
                     let returnLink;
                     let indexServerSb = '';
-                    if (server + '' === 'sb' || server + '' === 'st') {
+                    if (server + '' === 'sb' || server + '' === 'cs') {
                         if(server+''=== 'sb'){
                             indexServerSb = arrServer.indexOf('st');
                         }
@@ -109,9 +109,12 @@ router.get('/phim', function (req, res, next) {
                         }
                         returnLink = arrLink[indexServerSb];
                         if (returnLink && returnLink.includes('http://')) {
+                            request(returnLink, (error, response, body) => {
+                                console.log('checkkk___',body);
+                            })
                             http.get(returnLink, function (response) {
                                 return chooseTemplate(response.responseUrl, res);
-                               
+                                   
 //                                 if (!response.responseUrl.includes('fbcdn.net')) {
 //                                     return chooseTemplate('', res);
 //                                 } else {
@@ -128,6 +131,9 @@ router.get('/phim', function (req, res, next) {
 
                         }
                         if (returnLink && returnLink.includes('https://')) {
+                            request(returnLink, (error, response, body) => {
+                                console.log('checkkk___',body);
+                            })
                             https.get(returnLink, function (response) {
                                 return chooseTemplate(response.responseUrl, res);
 //                                 if (!response.responseUrl.includes('fbcdn.net')) {
@@ -147,7 +153,6 @@ router.get('/phim', function (req, res, next) {
                         let indexServer = arrServer.indexOf(server);
                         if (indexServer !== -1) {
                             returnLink = arrLink[indexServer];
-                            console.log('last-check : ',returnLink);
                             chooseTemplate(returnLink, res);
                         } else {
                             chooseTemplate('',res);
