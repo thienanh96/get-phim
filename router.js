@@ -96,13 +96,13 @@ router.get('/phim', function (req, res, next) {
                         }
                     }
                     let returnLink;
-                    if (server + '' === 'sb' || server + '' === 'cs') {
+                    if (server + '' === 'sb' || server + '' === 'st') {
                         let indexServerSb = '';
                         if(server+''=== 'sb'){
                             indexServerSb = arrServer.indexOf('st');
                         }
-                        if(server+''=== 'cs'){
-                            indexServerSb = arrServer.indexOf('cs');
+                        if(server+''=== 'st'){
+                            indexServerSb = arrServer.indexOf('sb');
                         }
                         returnLink = arrLink[indexServerSb];
                         console.log('return:  ',returnLink);
