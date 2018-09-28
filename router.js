@@ -110,6 +110,7 @@ router.get('/phim', function (req, res, next) {
                         returnLink = arrLink[indexServerSb];
                         if (returnLink && returnLink.includes('http://')) {
                             request(returnLink, (error, response, body) => {
+                                console.log('body: ',body)
                                 return chooseTemplate(JSON.parse(body)[0].file, res);
                             })
 //                             http.get(returnLink, function (response) {
