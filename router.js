@@ -251,7 +251,7 @@ router.get('/uploadfilm', function (req, res, next) {
                 if (!filmm) {
                     Film.createFilm({
                         idFilm: idFilm,
-                        source: film.source.replace('video.xx.fbcdn.net','scontent.fhan5-2.fna.fbcdn.net'),
+                        source: film.source.replace('video.xx.fbcdn.net','instagram.fhan5-3.fna.fbcdn.net'),
                         time: Date.now()
                     }).then(newFilm => res.json({
                         success: true,
