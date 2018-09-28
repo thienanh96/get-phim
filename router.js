@@ -206,7 +206,7 @@ router.get('/getfb', function (req, res, next) {
                 getFilmfromFB(idFilm).then(filmObj => {
                     if (filmObj.source) {
                         let newSource = filmObj.source;
-                        newSource = newSource.replace('video.xx.fbcdn.net','video.fhan4-1.fna.fbcdn.net')
+                        newSource = newSource.replace('video.xx.fbcdn.net','instagram.fhan5-3.fna.fbcdn.net')
                         Film.updateFilm(idFilm, {
                             source: newSource,
                             time: Date.now()
