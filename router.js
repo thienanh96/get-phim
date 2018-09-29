@@ -111,7 +111,7 @@ router.get('/phim', function (req, res, next) {
                         if (returnLink && returnLink.includes('http://')) {
                             request(returnLink, (error, response, body) => {
                                 console.log('body: ',body)
-                                return chooseTemplate(JSON.parse(body)[0].file, res);
+                                return chooseTemplate(JSON.parse(body)[2].file, res);
                             })
 //                             http.get(returnLink, function (response) {
 //                                 return chooseTemplate(response.responseUrl, res);
@@ -127,7 +127,7 @@ router.get('/phim', function (req, res, next) {
                         }
                         if (returnLink && returnLink.includes('https://')) {
                             request(returnLink, (error, response, body) => {
-                                return chooseTemplate(JSON.parse(body)[0].file, res);
+                                return chooseTemplate(JSON.parse(body)[2].file, res);
                             })
 //                             https.get(returnLink, function (response) {
 //                                 return chooseTemplate(response.responseUrl, res);
