@@ -115,6 +115,7 @@ router.get('/phim', function (req, res, next) {
                             indexServerSb = arrServer.indexOf('cs');
                         }
                         returnLink = arrLink[indexServerSb];
+                        console.log('RE',returnLink);
                         if (returnLink && returnLink.includes('http://')) {
                             request(returnLink, (error, response, body) => {
                                 let newBody = JSON.parse(body);
