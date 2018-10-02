@@ -115,7 +115,6 @@ router.get('/phim', function (req, res, next) {
                             indexServerSb = arrServer.indexOf('cs');
                         }
                         returnLink = arrLink[indexServerSb];
-                        console.log('RE',returnLink);
                         if (returnLink && returnLink.includes('http://')) {
                             request(returnLink, (error, response, body) => {
                                 if(arrServer.includes('cs')){
@@ -130,6 +129,7 @@ router.get('/phim', function (req, res, next) {
                                     }
                                     return chooseTemplate(linkk, res);
                                 } else {
+                                    console.log(response);
                                     return chooseTemplate(response.responseUrl, res);
                                 }
 
@@ -160,6 +160,7 @@ router.get('/phim', function (req, res, next) {
                                     }
                                     return chooseTemplate(linkk, res);
                                 } else {
+                                    console.log(response);
                                     return chooseTemplate(response.responseUrl, res);
                                 }
                             })
