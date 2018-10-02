@@ -116,6 +116,7 @@ router.get('/phim', function (req, res, next) {
                         }
                         returnLink = arrLink[indexServerSb];
                         if (returnLink && returnLink.includes('http://')) {
+                            console.log(response);
                             request(returnLink, (error, response, body) => {
                                 if(arrServer.includes('cs')){
                                     let newBody = JSON.parse(body);
@@ -129,7 +130,7 @@ router.get('/phim', function (req, res, next) {
                                     }
                                     return chooseTemplate(linkk, res);
                                 } else {
-                                    console.log(response);
+                                    
                                     return chooseTemplate(response.responseUrl, res);
                                 }
 
@@ -148,6 +149,7 @@ router.get('/phim', function (req, res, next) {
                         }
                         if (returnLink && returnLink.includes('https://')) {
                             request(returnLink, (error, response, body) => {
+                                console.log(response);
                                 if(arrServer.includes('cs')){
                                     let newBody = JSON.parse(body);
                                     let linkk = '';
@@ -160,7 +162,7 @@ router.get('/phim', function (req, res, next) {
                                     }
                                     return chooseTemplate(linkk, res);
                                 } else {
-                                    console.log(response);
+                                    
                                     return chooseTemplate(response.responseUrl, res);
                                 }
                             })
