@@ -103,8 +103,10 @@ router.get('/phim', function (req, res, next) {
                         }
                         if(server+''=== 'st'){
                             if(arrServer.includes('cs')){
+                                console.log('CS')
                                 indexServerSb = arrServer.indexOf('cs'); //fix ở đây
                             } else {
+                                console.log('SB')
                                 indexServerSb = arrServer.indexOf('sb'); //fix ở đây
                             }
                             
