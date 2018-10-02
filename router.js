@@ -115,10 +115,11 @@ router.get('/phim', function (req, res, next) {
                             indexServerSb = arrServer.indexOf('cs');
                         }
                         returnLink = arrLink[indexServerSb];
-                        if (returnLink && returnLink.includes('http://')) {
-                            console.log(response);
-                            request(returnLink, (error, response, body) => {
-                                if(arrServer.includes('cs')){
+ 
+                        if (returnLink) {
+                            
+                            if(arrServer.includes('cs')){
+                                  request(returnLink, (error, response, body) => {
                                     let newBody = JSON.parse(body);
                                     let linkk = '';
                                     if(newBody[2]){
@@ -129,12 +130,11 @@ router.get('/phim', function (req, res, next) {
                                         linkk = newBody[0].file
                                     }
                                     return chooseTemplate(linkk, res);
-                                } else {
-                                    
-                                    return chooseTemplate(response.responseUrl, res);
-                                }
-
                             })
+                            } else {
+                                    return chooseTemplate(returnLink, res);
+                            }  
+
 //                             http.get(returnLink, function (response) {
 //                                 return chooseTemplate(response.responseUrl, res);
                                   
@@ -147,32 +147,32 @@ router.get('/phim', function (req, res, next) {
                             return chooseTemplate('', res);
 
                         }
-                        if (returnLink && returnLink.includes('https://')) {
-                            request(returnLink, (error, response, body) => {
-                                console.log(response);
-                                if(arrServer.includes('cs')){
-                                    let newBody = JSON.parse(body);
-                                    let linkk = '';
-                                    if(newBody[2]){
-                                        linkk = newBody[2].file
-                                    } else if(!newBody[2] && newBody[1]){
-                                        linkk = newBody[1].file
-                                    } else if(!newBody[2] && !newBody[1] && newBody[0]){
-                                        linkk = newBody[0].file
-                                    }
-                                    return chooseTemplate(linkk, res);
-                                } else {
+//                         if (returnLink && returnLink.includes('https://')) {
+//                             request(returnLink, (error, response, body) => {
+//                                 console.log(response);
+//                                 if(arrServer.includes('cs')){
+//                                     let newBody = JSON.parse(body);
+//                                     let linkk = '';
+//                                     if(newBody[2]){
+//                                         linkk = newBody[2].file
+//                                     } else if(!newBody[2] && newBody[1]){
+//                                         linkk = newBody[1].file
+//                                     } else if(!newBody[2] && !newBody[1] && newBody[0]){
+//                                         linkk = newBody[0].file
+//                                     }
+//                                     return chooseTemplate(linkk, res);
+//                                 } else {
                                     
-                                    return chooseTemplate(response.responseUrl, res);
-                                }
-                            })
-//                             https.get(returnLink, function (response) {
-//                                 return chooseTemplate(response.responseUrl, res);
-//                             }).on('error', function (err) {
-//                                 return chooseTemplate('', res);
+//                                     return chooseTemplate(response.responseUrl, res);
+//                                 }
+//                             })
+// //                             https.get(returnLink, function (response) {
+// //                                 return chooseTemplate(response.responseUrl, res);
+// //                             }).on('error', function (err) {
+// //                                 return chooseTemplate('', res);
 
-//                             });
-                        }
+// //                             });
+//                         }
 
                     } else {
                         let indexServer = arrServer.indexOf(server);
