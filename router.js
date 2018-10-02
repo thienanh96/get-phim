@@ -118,16 +118,21 @@ router.get('/phim', function (req, res, next) {
                         console.log('RE',returnLink);
                         if (returnLink && returnLink.includes('http://')) {
                             request(returnLink, (error, response, body) => {
-                                let newBody = JSON.parse(body);
-                                let linkk = '';
-                                if(newBody[2]){
-                                    linkk = newBody[2].file
-                                } else if(!newBody[2] && newBody[1]){
-                                    linkk = newBody[1].file
-                                } else if(!newBody[2] && !newBody[1] && newBody[0]){
-                                    linkk = newBody[0].file
+                                if(arrServer.includes('cs')){
+                                    let newBody = JSON.parse(body);
+                                    let linkk = '';
+                                    if(newBody[2]){
+                                        linkk = newBody[2].file
+                                    } else if(!newBody[2] && newBody[1]){
+                                        linkk = newBody[1].file
+                                    } else if(!newBody[2] && !newBody[1] && newBody[0]){
+                                        linkk = newBody[0].file
+                                    }
+                                    return chooseTemplate(linkk, res);
+                                } else {
+                                    return chooseTemplate(response.responseUrl, res);
                                 }
-                                return chooseTemplate(linkk, res);
+
                             })
 //                             http.get(returnLink, function (response) {
 //                                 return chooseTemplate(response.responseUrl, res);
@@ -143,16 +148,20 @@ router.get('/phim', function (req, res, next) {
                         }
                         if (returnLink && returnLink.includes('https://')) {
                             request(returnLink, (error, response, body) => {
-                                let newBody = JSON.parse(body);
-                                let linkk = '';
-                                if(newBody[2]){
-                                    linkk = newBody[2].file
-                                } else if(!newBody[2] && newBody[1]){
-                                    linkk = newBody[1].file
-                                } else if(!newBody[2] && !newBody[1] && newBody[0]){
-                                    linkk = newBody[0].file
+                                if(arrServer.includes('cs')){
+                                    let newBody = JSON.parse(body);
+                                    let linkk = '';
+                                    if(newBody[2]){
+                                        linkk = newBody[2].file
+                                    } else if(!newBody[2] && newBody[1]){
+                                        linkk = newBody[1].file
+                                    } else if(!newBody[2] && !newBody[1] && newBody[0]){
+                                        linkk = newBody[0].file
+                                    }
+                                    return chooseTemplate(linkk, res);
+                                } else {
+                                    return chooseTemplate(response.responseUrl, res);
                                 }
-                                return chooseTemplate(link, res);
                             })
 //                             https.get(returnLink, function (response) {
 //                                 return chooseTemplate(response.responseUrl, res);
